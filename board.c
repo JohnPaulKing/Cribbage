@@ -34,10 +34,11 @@ void boardInit() {
     //for each pegging points
 
     //set positions of card slots
-    setPos(CARD,PLAYER1_HAND,&players[0].hand.cards); //player 0's hand
+    //print series of cards
+    setPos(CARD,PLAYER1_HAND,&players[0].hand.cards[0]); //player 0's hand
     //setPos(CARD,PLAYER1_CRIB,&crib->cards); //player 0 crib
-    setPos(CARD,PLAYER2_HAND,&players[1].hand.cards); //player 1's hand
     //setPos(CARD,PLAYER2_CRIB,&crib->cards); //player 1 crib
+    setPos(CARD,PLAYER2_HAND,&players[1].hand.cards[0]); //player 1's hand
     //for each pegging card
 
     
@@ -62,7 +63,7 @@ void draw(){
                     x+= strlen(str); //length of score, 
                 } else if (node->type >= CARD) {
                     //starting at value CARD, type is incremented with each part of the card
-                    x+= drawPartOfCard((* (Card**) (node->ptr)),node->type-CARD);
+                    x+= drawPartOfCard((* (Card**) (node->ptr)),(node->type-CARD));
                     //note to mark rest of card
                 } else if (node->type == TEXT) {
                     printf("%s",(char*) (node->ptr));
@@ -159,16 +160,16 @@ void setPos(Datatype type,enum POSITIONS pos, void* ptr) {
         /*
         Because cards take up vertical space, each vertical part has to have its pointer "stored" on the board
         As well as which part it is. The type is of course card (the last type), so we add to that which part it is
-        Meaning type is the first layer of a card, type+1 the middle, etc
+        Meaning CARD is the first layer of a card, CARD+1 the next, etc
         */
         for (char i = 0; i < CARD_HEIGHT; i++) {
             //add pointer to each position of the card vertically
             board[positions[pos].y+i][positions[pos].x].ptr = ptr;
             //mark which part of the card
-            board[positions[pos].y][positions[pos].x].type = type+i;
+            board[positions[pos].y+i][positions[pos].x].type = type+i;
 
             //this commented out print demonstrates that each card is held in the correct position
-            //printf("position: x%d, y%d, type:%d\n",positions[pos].x,positions[pos].y+i,type+i);
+            //printf("position: x%d, y%d, type:%d\n",positions[pos].x,positions[pos].y+i,board[positions[pos].y+i][positions[pos].x].type);
         }
     }
 }

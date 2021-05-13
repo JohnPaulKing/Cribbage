@@ -87,7 +87,7 @@ void boardInit(); //initialize board
 void draw(); //draw board to screen
 int drawPartOfCard(Card*, int); //draws part of card specified
 void spChar(wchar_t); //print special characters
-void setPos(Datatype,enum POSITIONS, void* );
+void setPos(Datatype,enum POSITIONS, void* ); //set positions of screen objects
 void setHand(int,enum POSITIONS, void*);
 
 #endif

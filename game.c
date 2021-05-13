@@ -9,7 +9,7 @@
 int main(int argc, char **argv) {
     //initialize variables, and game
     gameInit();
-    //draw();
+    draw();
 
 }
 
