@@ -1,0 +1,59 @@
+Cribbage by John-Paul King
+
+Consists of game.c
+    - main()
+        -select first dealer
+        while game not won
+            deal cards
+            select cards for Crib
+            pegging
+            count cards
+            Display winner
+
+gameState
+    players[2]
+    char dealer
+
+board
+    position hands[2][6] //hand of 6 cards each player
+    position crib[4] //hand
+    position cut
+    position played[5]
+    position message[20]
+
+players
+    score
+    hand[6]
+    name[16]
+
+int suit[]
+
+card
+    val
+    suit
+
+
+deck[52]
+    initDeck
+    shuffleDeck
+
+util
+    pos[2]
+
+board
+    draw()
+
+
+Progress list:
+Day 1:
+    basic plans
+    some data structures
+    printing special chars
+
+Day 2:
+    board map
+    printing a single card
+
+Day 3:
+    color printing to cards
+    card data structures
