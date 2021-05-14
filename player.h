@@ -15,6 +15,7 @@ typedef struct {
 typedef struct{
     char name[NAME_LENGTH];
     Hand hand; //array of card "slots" (ptrs), & points
+    Hand crib; //card slots and points for this crib
     Card *selectedCard; //selected card
     unsigned char score; //score
     void (*playPeggingCard)(); //function to play a card in pegging

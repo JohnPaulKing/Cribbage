@@ -19,10 +19,10 @@ typedef struct peggingSlot {
 
 //Initialize players
 Player players[PLAYER_COUNT]; //initialize players
-Hand crib; //initialize crib
 //set up 8 pegging slots
 PeggingSlot pegging[PEGGING_CARD_AMOUNT];
 char peggingCardsPlayed = 0;
+bool dealer; //0 or 1
 bool gameWon = false; //true when game ends
 
 
@@ -30,5 +30,7 @@ int main(); //main, starting point for game
 void gameInit(); // initiate the board and deck
     //deck init
     //set each player
+void cutForFirst();
+void switchDealer();
 
 #endif

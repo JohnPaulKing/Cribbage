@@ -89,5 +89,7 @@ int drawPartOfCard(Card*, int); //draws part of card specified
 void spChar(wchar_t); //print special characters
 void setPos(Datatype,enum POSITIONS, void* ); //set positions of screen objects
 void setHand(int,enum POSITIONS, void*);
+void setPosForHand(Hand*, enum POSITIONS, char); //set the position for each card in a hand
+void setPosForCard(void*,int,int); //set position for an individual card
 
 #endif

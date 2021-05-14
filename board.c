@@ -26,19 +26,19 @@ void boardInit() {
     setPos(TEXT,CONSOLE,consoleMessage);
     //set positions of numbers 
     setPos(NUMBER,PLAYER1_POINTS,&players[0].hand.points); //player 0's hand points
-    setPos(NUMBER,PLAYER1_CRIB_POINTS,&crib.points); //player 0's crib points
+    setPos(NUMBER,PLAYER1_CRIB_POINTS,&players[0].crib.points); //player 0's crib points
     setPos(NUMBER,PLAYER1_SCORE,&players[0].score); //player 0's overall score
     setPos(NUMBER,PLAYER2_SCORE,&players[1].score); //playyer 1's overall score
     setPos(NUMBER,PLAYER2_POINTS,&players[1].hand.points); //player 1's hand points
-    setPos(NUMBER,PLAYER2_CRIB_POINTS,&crib.points); //player 1's crib points
+    setPos(NUMBER,PLAYER2_CRIB_POINTS,&players[1].crib.points); //player 1's crib points
     //for each pegging points
 
     //set positions of card slots
     //print series of cards
-    setPos(CARD,PLAYER1_HAND,&players[0].hand.cards[0]); //player 0's hand
-    //setPos(CARD,PLAYER1_CRIB,&crib->cards); //player 0 crib
-    //setPos(CARD,PLAYER2_CRIB,&crib->cards); //player 1 crib
-    setPos(CARD,PLAYER2_HAND,&players[1].hand.cards[0]); //player 1's hand
+    setPosForHand(&players[0].hand,PLAYER1_HAND,HAND_SIZE); //player 0's hand
+    setPosForHand(&players[0].crib,PLAYER1_CRIB,0); //player 0 crib
+    setPosForHand(&players[1].crib,PLAYER2_CRIB,0); //player 0 crib
+    setPosForHand(&players[1].hand,PLAYER2_HAND,HAND_SIZE); //player 1's hand
     //for each pegging card
 
     
@@ -115,7 +115,9 @@ int drawPartOfCard(Card *card, int partOfCard) {
                 }
             } else { //print suit|value|suit
                 spChar(suitSymbol[card->suit]);
-                if (card->type < 10){
+                if (card-> type == 1) {
+                    printf("%c",'A'); //Ace
+                } else if (card->type < 10){
                     printf("%d",card->type);
                 } else if (card-> type == 10) {
                     printf("%c",'X'); //10 is two characters and would mess things up
@@ -164,13 +166,41 @@ void setPos(Datatype type,enum POSITIONS pos, void* ptr) {
         */
         for (char i = 0; i < CARD_HEIGHT; i++) {
             //add pointer to each position of the card vertically
-            board[positions[pos].y+i][positions[pos].x].ptr = ptr;
-            //mark which part of the card
-            board[positions[pos].y+i][positions[pos].x].type = type+i;
-
-            //this commented out print demonstrates that each card is held in the correct position
-            //printf("position: x%d, y%d, type:%d\n",positions[pos].x,positions[pos].y+i,board[positions[pos].y+i][positions[pos].x].type);
+            setPosForCard(ptr,positions[pos].y,positions[pos].x);
         }
     }
 }
+
+/*
+set the position for each part of the card
+*/
+void setPosForCard(void* ptr,int y, int x) {
+        //if card pointer not null
+        if (* (Card**) ptr) { //convert to a pointer to a pointer to a card, dereference
+            for (char i = 0; i < CARD_HEIGHT; i++) {
+                //add pointer to each position of the card vertically
+                board[y+i][x].ptr = ptr;
+                //mark which part of the card
+                board[y+i][x].type = CARD+i;
+            }
+        }
+}
+
+/*
+Calls set pos for each card in a hand of size size
+
+*/
+void setPosForHand(Hand* hand, enum POSITIONS pos, char size){
+    //for each card, set its position
+    for (char i = 0; i < size; i++) {
+        /*
+        This function calls the set pos for cards
+        First it converts the card pointer pointer into a void pointer
+        Then it passes in the y pos, and the x pos, which is modified by the amount of cards printed so far
+        */
+        setPosForCard((void*) &(hand->cards[i]),positions[pos].y,positions[pos].x + ((CARD_WIDTH+3)*i));
+    }
+}
+
+
 
