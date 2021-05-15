@@ -13,7 +13,7 @@
 //TODO make constants
 const char const *RED = "\x1B[31m";
 const char const *GREEN = "\x1B[32m";
-const char const *RESET_COLOR = "\x1B[0m";
+const char const *RESET_COLOR = "\x1b[36m";
 
 int screenSize[] = {BOARD_HEIGHT,BOARD_WIDTH}; //row, column
 
@@ -35,18 +35,18 @@ struct position {
 
 struct position positions[] = {  {1,15}, {1,45}, //player 1 hand and crib text
                                  {2,0}, {2,38}, //player 1 hand and crib
-                                 {5,0}, {5,17}, {5,25}, {5,55}, //player 1 points
+                                 {5,0}, {5,8}, {5,40}, {5,48}, //player 1 points
                                  {7,0}, //deck text
                                  {8,0}, //deck
-                                 {10,14}, //pegging text
-                                 {11,0}, {11,55}, //pegging cards, score text
-                                 {12,55}, {12,65}, //player 1 score text, score
-                                 {13,55}, {13,65}, //player 2 score text, score
-                                 {14,0}, //pegging points
-                                 {16,15}, {16,45}, //player 2 hand and crib text
-                                 {17,0}, {17,38}, //player 2 hand and crib
-                                 {20,0}, {20,17}, {20,25}, {20,55}, //player 2 points
-                                 {22,0} //console
+                                 {10,20}, //pegging text
+                                 {12,0}, {12,55}, //pegging cards, score text
+                                 {12,50}, {12,58}, //player 1 score text, score
+                                 {13,50}, {13,58}, //player 2 score text, score
+                                 {14,0}, //pegging points {UNUSED}
+                                 {18,15}, {18,45}, //player 2 hand and crib text
+                                 {19,0}, {19,38}, //player 2 hand and crib
+                                 {22,0}, {22,8}, {22,40}, {22,48}, //player 2 points
+                                 {24,0} //console
 };
 /*
 Based on the board outlined in map.h
@@ -91,5 +91,6 @@ void setPos(Datatype,enum POSITIONS, void* ); //set positions of screen objects
 void setHand(int,enum POSITIONS, void*);
 void setPosForHand(Hand*, enum POSITIONS, char); //set the position for each card in a hand
 void setPosForCard(void*,int,int); //set position for an individual card
+void setPosForPegging();
 
 #endif

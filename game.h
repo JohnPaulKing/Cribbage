@@ -13,7 +13,7 @@
 //Each pegging slot holds a card, but also has an owner
 typedef struct peggingSlot {
     Card *card; //card
-    Player *owner; //owner of card (who played card)
+    bool owner; //who owns the card
     unsigned char points; // points that this card gained
 } PeggingSlot;
 
@@ -32,5 +32,6 @@ void gameInit(); // initiate the board and deck
     //set each player
 void cutForFirst();
 void switchDealer();
+void round();
 
 #endif

@@ -7,12 +7,13 @@
 #include "test.c"
 
 int main(int argc, char **argv) {
-    //initialize variables, and game
     gameInit();
     switchDealer();
+
     draw();
-    
-    draw();
+    for (int i = 0; i < 100; i++) {
+        cutDeck();
+    }
 }
 
 //runs once at start of game
@@ -22,9 +23,15 @@ void gameInit() {
     initDeck();
     shuffleDeck();
     deal(&players[0].hand,&players[1].hand);
+    cutDeck();
     revealCards(&players[1].hand); //flip human players cards
     //fill memory locations of board
+        //initialize variables, and game
     boardInit();
+}
+
+void round(){
+    
 }
 
 /*

@@ -47,10 +47,10 @@ set that card as cut card
 void cutDeck() {
     //must leave a buffer of cards on each side
     //starts at hand_size*2 because that many cards have been "dealt" from the top
-    char low = (HAND_SIZE*2) + CUT_BUFFER;
-    char high = DECK_SIZE - CUT_BUFFER - 1;
+    char low = (HAND_SIZE*2) + CUT_BUFFER; //16
+    char high = DECK_SIZE - CUT_BUFFER - 1; //47
     //randomly generate a card
-    char indexOfCut = rand()%high-low;
+    char indexOfCut = rand()%(high-low);
     //offset it by adding low
     indexOfCut+=low;
     topCard = shuffled[indexOfCut]; //move card to "top"

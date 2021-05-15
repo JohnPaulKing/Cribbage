@@ -1,6 +1,6 @@
 #include "board.h"
 #include "game.h"
-
+#include "deck.h"
 
 #define BUFFER_SIZE 15 //max characters in string
 
@@ -32,19 +32,34 @@ void boardInit() {
     setPos(NUMBER,PLAYER2_POINTS,&players[1].hand.points); //player 1's hand points
     setPos(NUMBER,PLAYER2_CRIB_POINTS,&players[1].crib.points); //player 1's crib points
     //for each pegging points
-
     //set positions of card slots
     //print series of cards
     setPosForHand(&players[0].hand,PLAYER1_HAND,HAND_SIZE); //player 0's hand
     setPosForHand(&players[0].crib,PLAYER1_CRIB,0); //player 0 crib
     setPosForHand(&players[1].crib,PLAYER2_CRIB,0); //player 0 crib
     setPosForHand(&players[1].hand,PLAYER2_HAND,HAND_SIZE); //player 1's hand
-    //for each pegging card
+    //set position for the "cut card" or top card
+    setPos(CARD,DECK,&topCard);
+}
 
-    
+void setPosForPegging(){
+    //for each pegging card
+    for (char i = 0; i < peggingCardsPlayed; i++) {
+        //first set positions for the card
+        char y = positions[PEGGING_CARDS].y + pegging[i].owner; //offset slightly based on who played card
+        char x = positions[PEGGING_CARDS].x + ((CARD_WIDTH+3)*i); //offset for each card
+        setPosForCard(&pegging[i].card,y,x); //set position
+        y += (pegging[i].owner) ? -1 : 3; //offset to either above or below card
+        x+=2; //center of the card
+        //set positions mauaslly
+        board[y][x].ptr = &pegging[i].points;
+        board[y][x].type = NUMBER;
+    }
 }
 
 void draw(){
+    printf("%s",RESET_COLOR); //default color
+    setPosForPegging(); //set dynamically set pegging cards
     system("clear"); //clear console
     Printable *node;
     for (int y = 0; y < BOARD_HEIGHT; y++) {
@@ -141,6 +156,7 @@ int drawPartOfCard(Card *card, int partOfCard) {
             //printf("%s",RESET_COLOR); //reset the color after the last part has been printeed
             break;
     }
+    printf("%s",RESET_COLOR); //default color
     return CARD_WIDTH +2; //amount of characters printed
 }
 
