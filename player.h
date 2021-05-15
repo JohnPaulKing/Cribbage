@@ -23,5 +23,10 @@ typedef struct{
 } Player;
 
 void revealCards(Hand*);
+void selectCardsWithInput();
+void selectCardsWithCPU();
+void pegWithInput();
+void pegWithCPU();
+void sendCardToCrib(Hand*, char); //send a card from a hand to crib, and remove it
 
 #endif

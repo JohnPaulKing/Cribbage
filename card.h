@@ -19,6 +19,7 @@ typedef struct{
     unsigned char type; //Ace-9, J,Q,K
     bool hidden; //whether the cards value is shown or hidden
     bool selected; //whether current card is selected
+    bool pegged;
 } Card;
 
 #endif
