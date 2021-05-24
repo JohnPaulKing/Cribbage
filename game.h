@@ -19,6 +19,7 @@ typedef struct peggingSlot {
 
 //Initialize players
 Player players[PLAYER_COUNT]; //initialize players
+//players[0].hand.points=0;
 //set up 8 pegging slots
 PeggingSlot pegging[PEGGING_CARD_AMOUNT];
 char peggingCardsPlayed = 0;

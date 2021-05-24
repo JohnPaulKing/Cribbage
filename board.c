@@ -72,7 +72,7 @@ void draw(){
                     //print as 3 numbers always
                     char str[BUFFER_SIZE];
                     //print to buffer
-                    snprintf(str,BUFFER_SIZE,"%d",(* (int*) (node->ptr)));
+                    snprintf(str,BUFFER_SIZE,"%d",(* (char*) (node->ptr)));
                     printf("%s",str); //changed from %sd ? is this a bug? 
                     //increase x by number of chars printed
                     x+= strlen(str); //length of score, 

@@ -17,6 +17,7 @@ void gameInit() {
     //initialize deck
     //fill memory locations of board
         //initialize variables, and game
+    playersInit();
     initDeck();
     boardInit();
 }
@@ -32,9 +33,8 @@ void singleRound(){
     //wait until player selects their cards to discard
     cutDeck();
     draw();
-    selectCardsWithCPU();
-    selectCardsWithInput();
-    draw();
+    selectCardsForCribWithCPU();
+    selectCardsForCribWithInput();
 }
 
 /*

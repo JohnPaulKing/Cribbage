@@ -66,6 +66,8 @@ void deal(Hand* hand0,Hand* hand1) {
         //set the card ptr in each hand
         //increase the index in deck
         hand0->cards[i] = shuffled[cardIndex++];
+        hand0->cardsInHand++; //increase number of cards
         hand1->cards[i] = shuffled[cardIndex++];
+        hand1->cardsInHand++; // increase number of cards
     }
 }
