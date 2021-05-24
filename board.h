@@ -22,7 +22,7 @@ enum gameMessages {BILL_HAND_TXT,PLAYER_HAND_TXT,CRIB_TXT,DECK_TXT,POINTS_TXT,PE
 //Each string that needs to be printed
 char *gameMessages[] = {"Bill's Hand","Player's Hand","Crib","Deck","Points: ","Pegging","Score","Player: ","Bill","Console: "};
 
-char *consoleMessage; //Message that displays current information about game
+char consoleMessage[BOARD_WIDTH]; //Message that displays current information about game
 
 //positions of each element on the board
 

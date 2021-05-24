@@ -23,3 +23,12 @@ void testShuffle() {
         printf("suit: %d, number: %d\n",shuffled[i]->suit,shuffled[i]->type);
     }
 }
+
+void testCribContents() {
+        //print cards in crib
+    for (char i = 0; i < CRIB_SIZE; i++) {
+        if (players[dealer].crib.cards[i]) {
+            printf("crib slot %d = %p, suit = %d\n", i, players[dealer].crib.cards[i],players[dealer].crib.cards[i]->suit);
+        }
+    }
+}

@@ -5,7 +5,7 @@
 #define BUFFER_SIZE 15 //max characters in string
 
 void boardInit() {
-    consoleMessage = "board under development";
+    strcpy(consoleMessage,"board under development");
     char *locale = setlocale(LC_ALL, ""); //set up unicode printing
     //set positions of text on data map
     setPos(TEXT,PLAYER1_TEXT,gameMessages[BILL_HAND_TXT]);
@@ -35,8 +35,8 @@ void boardInit() {
     //set positions of card slots
     //print series of cards
     setPosForHand(&players[0].hand,PLAYER1_HAND,HAND_SIZE); //player 0's hand
-    setPosForHand(&players[0].crib,PLAYER1_CRIB,0); //player 0 crib
-    setPosForHand(&players[1].crib,PLAYER2_CRIB,0); //player 0 crib
+    setPosForHand(&players[0].crib,PLAYER1_CRIB,CRIB_SIZE); //player 0 crib
+    setPosForHand(&players[1].crib,PLAYER2_CRIB,CRIB_SIZE); //player 0 crib
     setPosForHand(&players[1].hand,PLAYER2_HAND,HAND_SIZE); //player 1's hand
     //set position for the "cut card" or top card
     setPos(CARD,DECK,&topCard);
@@ -77,8 +77,14 @@ void draw(){
                     //increase x by number of chars printed
                     x+= strlen(str); //length of score, 
                 } else if (node->type >= CARD) {
+                    
                     //starting at value CARD, type is incremented with each part of the card
-                    x+= drawPartOfCard((* (Card**) (node->ptr)),(node->type-CARD));
+                    if (*(Card**)(node->ptr)) { //if valid card
+                        x+= drawPartOfCard((* (Card**) (node->ptr)),(node->type-CARD));
+                    } else {
+                        x++;
+                        printf(" ");//move to the right
+                    }
                     //note to mark rest of card
                 } else if (node->type == TEXT) {
                     printf("%s",(char*) (node->ptr));
@@ -192,14 +198,14 @@ set the position for each part of the card
 */
 void setPosForCard(void* ptr,int y, int x) {
         //if card pointer not null
-        if (* (Card**) ptr) { //convert to a pointer to a pointer to a card, dereference
-            for (char i = 0; i < CARD_HEIGHT; i++) {
-                //add pointer to each position of the card vertically
-                board[y+i][x].ptr = ptr;
-                //mark which part of the card
-                board[y+i][x].type = CARD+i;
-            }
+        //if (* (Card**) ptr) { //convert to a pointer to a pointer to a card, dereference
+        for (char i = 0; i < CARD_HEIGHT; i++) {
+            //add pointer to each position of the card vertically
+            board[y+i][x].ptr = ptr;
+            //mark which part of the card
+            board[y+i][x].type = CARD+i;
         }
+        //}
 }
 
 /*

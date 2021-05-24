@@ -8,35 +8,33 @@
 
 int main(int argc, char **argv) {
     gameInit();
-    switchDealer();
+    singleRound();
 
-    draw();
-    for (int i = 0; i < 100; i++) {
-        cutDeck();
-    }
 }
 
 //runs once at start of game
 void gameInit() {
-    memset(players[0].hand.cards,0,sizeof(Card*)*HAND_SIZE);
     //initialize deck
-    initDeck();
-    shuffleDeck();
-
     //fill memory locations of board
         //initialize variables, and game
+    initDeck();
     boardInit();
 }
 
-void round(){
+void singleRound(){
+    shuffleDeck();
     //deal 6 cards to each player
     deal(&players[0].hand,&players[1].hand);
     //cut the deck (not revealed until after selection)
-    cutDeck();
     //reveal the cards for the player
     revealCards(&players[1].hand); //flip human players cards
+    revealCards(&players[0].hand); //flip comp cards
     //wait until player selects their cards to discard
-    pegger();
+    cutDeck();
+    draw();
+    selectCardsWithCPU();
+    selectCardsWithInput();
+    draw();
 }
 
 /*

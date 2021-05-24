@@ -32,7 +32,7 @@ void gameInit(); // initiate the board and deck
     //set each player
 void cutForFirst();
 void switchDealer();
-void round();
+void singleRound();
 void pegger(); //each player takes turns pegging
 
 #endif

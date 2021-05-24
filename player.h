@@ -6,6 +6,9 @@
 #define NAME_LENGTH 10 //# char permissible in a player name
 #define HAND_SIZE 6 //starting cards in hand
 #define CRIB_SIZE 4 // number of cards in crib
+#define LEFT 75 //arrow key for left
+#define RIGHT 77 //arrow key for right
+//#define ENTER 
 
 typedef struct {
     Card *cards[HAND_SIZE]; //the cards the hand holds
@@ -28,5 +31,6 @@ void selectCardsWithCPU();
 void pegWithInput();
 void pegWithCPU();
 void sendCardToCrib(Hand*, char); //send a card from a hand to crib, and remove it
+char countCardsInCrib(Player*); //returns number of cards in this players crib
 
 #endif
