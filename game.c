@@ -32,9 +32,17 @@ void singleRound(){
     revealCards(&players[0].hand); //flip comp cards
     //wait until player selects their cards to discard
     cutDeck();
-    draw();
+
+    //CPU selects cards, and then player
     selectCardsForCribWithCPU();
     selectCardsForCribWithInput();
+    //they are then hidden
+    hideCards(&players[dealer].crib);
+
+    //pegging phase
+    peggingRound();
+
+    draw();
 }
 
 /*

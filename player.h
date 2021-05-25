@@ -30,6 +30,7 @@ typedef struct{
 } Player;
 
 void revealCards(Hand*);
+void hideCards(Hand*);
 void selectCardsForCribWithInput();
 void selectCardsForCribWithCPU();
 void pegWithInput();

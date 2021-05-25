@@ -5,8 +5,15 @@
 
 //makes all cards visible
 void revealCards(Hand* hand ) {
-    for (char i = 0; i < HAND_SIZE; i++) {
-        hand->cards[i]->hidden = !hand->cards[i]->hidden;
+    for (char i = 0; i < hand->cardsInHand; i++) {
+        hand->cards[i]->hidden = false;
+    }
+}
+
+//makes all cards in hand hidden
+void hideCards(Hand* hand ) {
+    for (char i = 0; i < hand->cardsInHand; i++) {
+        hand->cards[i]->hidden = true;
     }
 }
 
@@ -133,6 +140,5 @@ void sendCardToCrib(Hand* hand, char index) {
 }
 
 void playersInit() {
-    players[0].hand.points=0;
-    players[1].hand.points=0;
+    
 }
