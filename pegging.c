@@ -27,7 +27,8 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
     pegging[peggingCardsPlayed].card = hand->cards[index];
     //keep track of owner
     pegging[peggingCardsPlayed].owner = owner;
-    peggingCardsPlayed++; //increase to account for card added
+    pegging[peggingCardsPlayed].points = 1;
+    peggingCardsPlayed++; //increase global var to account for card added
     
     //now remove the card from the hand
 
@@ -48,19 +49,19 @@ void pegger () {
     //and while game not won
     char numberAdded; //the "value of the card" played, face value for A-10, 10 for j,q,k
     bool go = false; // simbolizes that last player said "go"
-    for (currentPegger = !dealer ;!gameWon && peggingCardsPlayed <= CRIB_SIZE*2; ) {
+    for (currentPegger = !dealer ;!gameWon && peggingCardsPlayed < CRIB_SIZE*2; ) {
         numberAdded= players[currentPegger].playPeggingCard(); //whether player able to play card
-        draw(); //draw screen
         if (numberAdded) { //a card is sucessfully played (0 if no card played)
             /*
             todo, get scoring of last card played
             */
-            peggingCardsPlayed++; //increase the number played
             peggingCount += numberAdded; //add the value of the pegged card to the total. if 15, and a J is played, count is 25
+            draw(); //draw screen
             if (players[0].score >= WIN_NUMBER) {
                 gameWon = true; //game has been won, return
                 return;
             }
+            
         } else if (go) { //if last player said go
             go = false; //reset
             peggingCount = 0; //reset the counter

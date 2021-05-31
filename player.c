@@ -193,7 +193,7 @@ void sendCardToCrib(Hand* hand, char index) {
 void playersInit() {
     // proper functions assigned
     players[0].selectCardsForCrib = &selectCardsForCribWithCPU;
-    players[0].playPeggingCard = &pegWithInput;
+    players[1].playPeggingCard = &pegWithInput;
     players[1].selectCardsForCrib = &selectCardsForCribWithInput;
-    players[1].playPeggingCard = &pegWithCPU;
+    players[0].playPeggingCard = &pegWithCPU;
 }
