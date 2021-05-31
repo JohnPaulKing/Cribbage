@@ -1,3 +1,7 @@
+/*
+THIS FILE IS ONLY FOR TESTING
+*/
+
 #include "player.h"
 #include "game.h"
 #include "card.h"

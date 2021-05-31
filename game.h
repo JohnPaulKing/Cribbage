@@ -3,26 +3,23 @@
 
 #include "player.h"
 #include "card.h"
+#include "pegging.h"
 
 #define WIN_NUMBER 121 //needed to win
 #define RESET 31 // 
 #define PEGGING_CARD_AMOUNT 8 //number of cards that can be played during pegging
 #define PLAYER_COUNT 2 //number of players
 
-
-//Each pegging slot holds a card, but also has an owner
-typedef struct peggingSlot {
-    Card *card; //card
-    bool owner; //who owns the card
-    unsigned char points; // points that this card gained
-} PeggingSlot;
-
 //Initialize players
 Player players[PLAYER_COUNT]; //initialize players
-//set up 8 pegging slots
+
+//pegging info
 PeggingSlot pegging[PEGGING_CARD_AMOUNT];
-char peggingCardsPlayed = 0;
-bool dealer; //0 or 1
+char peggingCardsPlayed = 0; 
+char peggingCount = 0; // starts at 0, resets at 31
+bool currentPegger; //which player must play a pegging card (if able)
+
+bool dealer = 0; //0 or 1
 bool gameWon = false; //true when game ends
 
 
@@ -33,7 +30,5 @@ void gameInit(); // initiate the board and deck
 void cutForFirst();
 void switchDealer();
 void singleRound();
-void pegger(); //each player takes turns pegging
-void peggingRound();
 
 #endif

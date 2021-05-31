@@ -10,7 +10,6 @@
 #include <wchar.h> //unicode
 
 //escape sequences for changing colors
-//TODO make constants
 const char const *RED = "\x1B[31m";
 const char const *GREEN = "\x1B[32m";
 const char const *RESET_COLOR = "\x1b[36m";
@@ -32,16 +31,19 @@ struct position {
     int x;
 };
 
-
+/*
+contains a map of tuples, each tuple represents a starting point for a certain element
+this is mapped to a list of printable objects (which have a pointer to some memory location)
+*/
 struct position positions[] = {  {1,15}, {1,45}, //player 1 hand and crib text
                                  {2,0}, {2,38}, //player 1 hand and crib
                                  {5,0}, {5,8}, {5,40}, {5,48}, //player 1 points
                                  {7,0}, //deck text
                                  {8,0}, //deck
-                                 {10,20}, //pegging text
+                                 {10,20}, {10,30},//pegging text, and current count
                                  {12,0}, {12,55}, //pegging cards, score text
                                  {12,50}, {12,58}, //player 1 score text, score
-                                 {13,50}, {13,58}, //player 2 score text, score
+                                 {13,50}, {13,70}, //player 2 score text, score
                                  {14,0}, //pegging points {UNUSED}
                                  {18,15}, {18,45}, //player 2 hand and crib text
                                  {19,0}, {19,38}, //player 2 hand and crib
@@ -56,7 +58,7 @@ enum POSITIONS {PLAYER1_TEXT,PLAYER1_CRIB_TEXT,
                 PLAYER1_POINTS_TEXT,PLAYER1_POINTS,PLAYER1_CRIB_POINTS_TEXT,PLAYER1_CRIB_POINTS, //PLAYER 1 SECTION
                 DECK_TEXT,
                 DECK,
-                PEGGING_TEXT,
+                PEGGING_TEXT, PEGGING_COUNT,
                 PEGGING_CARDS,SCORE_TEXT,
                 PLAYER1_SCORE_TEXT, PLAYER1_SCORE,
                 PLAYER2_SCORE_TEXT, PLAYER2_SCORE,
@@ -91,6 +93,8 @@ void setPos(Datatype,enum POSITIONS, void* ); //set positions of screen objects
 void setHand(int,enum POSITIONS, void*);
 void setPosForHand(Hand*, enum POSITIONS, char); //set the position for each card in a hand
 void setPosForCard(void*,int,int); //set position for an individual card
-void setPosForPegging();
+void setPosForPegging(); //set positions for a pegging slot, containing a card and points
+void console(char*); //print a message to console
+void clearConsole();
 
 #endif

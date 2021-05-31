@@ -25,7 +25,7 @@ typedef struct{
     Hand crib; //card slots and points for this crib
     char selectedCard; //selected card index
     unsigned char score; //score
-    void (*playPeggingCard)(); //function to play a card in pegging
+    unsigned char (*playPeggingCard)(); //function to play a card in pegging
     void (*selectCardsForCrib)(); //function to select a two cards for the crib
 } Player;
 
@@ -33,8 +33,8 @@ void revealCards(Hand*);
 void hideCards(Hand*);
 void selectCardsForCribWithInput();
 void selectCardsForCribWithCPU();
-void pegWithInput();
-void pegWithCPU();
+unsigned char pegWithInput();
+unsigned char pegWithCPU();
 void sendCardToCrib(Hand*, char); //send a card from a hand to crib, and remove it
 char countCardsInCrib(Player*); //returns number of cards in this players crib
 void selectCard(Player*); //change the selected card in a players hand

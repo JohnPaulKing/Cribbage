@@ -5,7 +5,6 @@
 #define BUFFER_SIZE 15 //max characters in string
 
 void boardInit() {
-    strcpy(consoleMessage,"board under development");
     char *locale = setlocale(LC_ALL, ""); //set up unicode printing
     //set positions of text on data map
     setPos(TEXT,PLAYER1_TEXT,gameMessages[BILL_HAND_TXT]);
@@ -31,6 +30,8 @@ void boardInit() {
     setPos(NUMBER,PLAYER2_SCORE,&players[1].score); //playyer 1's overall score
     setPos(NUMBER,PLAYER2_POINTS,&players[1].hand.points); //player 1's hand points
     setPos(NUMBER,PLAYER2_CRIB_POINTS,&players[1].crib.points); //player 1's crib points
+    setPos(NUMBER,PEGGING_COUNT,&peggingCount); //the number of cards played
+    
     //for each pegging points
     //set positions of card slots
     //print series of cards
@@ -49,9 +50,9 @@ void setPosForPegging(){
         char y = positions[PEGGING_CARDS].y + pegging[i].owner; //offset slightly based on who played card
         char x = positions[PEGGING_CARDS].x + ((CARD_WIDTH+3)*i); //offset for each card
         setPosForCard(&pegging[i].card,y,x); //set position
-        y += (pegging[i].owner) ? -1 : 3; //offset to either above or below card
+        y += (pegging[i].owner) ? 4 : -1; //offset to either above or below card
         x+=2; //center of the card
-        //set positions mauaslly
+        //set positions manually
         board[y][x].ptr = &pegging[i].points;
         board[y][x].type = NUMBER;
     }
@@ -224,5 +225,14 @@ void setPosForHand(Hand* hand, enum POSITIONS pos, char size){
     }
 }
 
+void console(char* message) {
+    strcpy(consoleMessage,message); //copy the message to correct position
+}
 
+/*
+Clear the console message
+*/
+void clearConsole() {
+    strcpy (consoleMessage,"");
+}
 

@@ -1,6 +1,7 @@
 #include "player.h"
 #include "game.h"
 #include "board.h"
+#include "pegging.h"
 
 
 //makes all cards visible
@@ -26,14 +27,64 @@ char countCardsInCrib(Player* player) {
     } return count;
 }
 
-void pegWithCPU(){
+/*
+The computer selects a card that is legally playable,
+or says "go" if unable
+*/ 
+unsigned char pegWithCPU(){
+    /* TODO
+    Add logic, for now just pick first card
+    */
+   unsigned char value; //this will hold the 1-10 value of a card
+   Hand* hand = &players[0].hand; 
+   //for each card
+   for (char i = 0; i < hand->cardsInHand; i++) { 
+       if (value = cardPeggable(hand->cards[i])) { //if card playable
+        sendCardToPegging(hand, i, 0); //send card at index i in hand to pegging slot
+        //above function takes care of math, etc
+        //at this point, this function just needs to return the amount (number) added to pegging count
+        return value;
+       } //end of loop, with no card played and value returned
+       //therefor we coudldn't play a card
+   }  return 0;
+}
+
+
+/*
+Player selects a card
+This function verifies that the card is legally playable
+if the player has no options, they may press enter for go
+*/
+unsigned char pegWithInput() {
+    //first check if any cards are legally playable
+    Hand* hand = &players[1].hand; 
+    unsigned char value; //this will hold the 1-10 value of a card
+    bool peggableCardInHand = false;
+    for (char i = 0; i < hand->cardsInHand; i++) { 
+       if (value = cardPeggable(hand->cards[i])) { //if card playable
+            peggableCardInHand = true; //mark that a card is playable
+       } 
+    }
+
+    if (peggableCardInHand) {
+        while (true) {
+            //player selects a card with input
+            selectCard(&players[1]); //player 1 selects card for pegging
+            if (value = cardPeggable(hand->cards[players[1].selectedCard])) { //if card is playable
+                sendCardToPegging(hand, players[1].selectedCard, 1); //send card at index i in hand to pegging slot
+                return value; 
+            }
+        }
+    } else {
+        return 0; //no cards playable
+    }
 }
 
 /*
 select to cards with 
 */
 void selectCardsForCribWithInput(){
-    strcpy(consoleMessage,"select a card"); //print message
+    console("select a card"); //print message
     selectCard(&players[1]); //player 1 selects first card
     sendCardToCrib(&players[1].hand, players[1].selectedCard);
     selectCard(&players[1]); //player 1 selects first card
@@ -115,7 +166,7 @@ Send a card from a hand to the crib
 Also must move subsequent cards down, and make null
 */
 void sendCardToCrib(Hand* hand, char index) {
-    //copy card pointer to peggingslot
+    //copy card pointer to crib
     players[dealer].crib.cards[countCardsInCrib(&players[dealer])] = hand->cards[index];
     players[dealer].crib.cardsInHand++; //increase
     //set card in hand to null (this will be overwritten)
@@ -140,5 +191,9 @@ void sendCardToCrib(Hand* hand, char index) {
 }
 
 void playersInit() {
-    
+    // proper functions assigned
+    players[0].selectCardsForCrib = &selectCardsForCribWithCPU;
+    players[0].playPeggingCard = &pegWithInput;
+    players[1].selectCardsForCrib = &selectCardsForCribWithInput;
+    players[1].playPeggingCard = &pegWithCPU;
 }

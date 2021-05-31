@@ -2,12 +2,16 @@
 #include "board.c"
 #include "deck.c"
 #include "player.c"
+#include "pegging.c"
 #include <locale.h> //unicode
 #include <stdio.h> //std out
 #include "test.c"
 
 int main(int argc, char **argv) {
     gameInit();
+
+    //while game isn't won, start the next round
+    //at both pegging and scoring, need breaks to check
     singleRound();
 
 }
@@ -33,16 +37,14 @@ void singleRound(){
     //wait until player selects their cards to discard
     cutDeck();
 
-    //CPU selects cards, and then player
-    selectCardsForCribWithCPU();
-    selectCardsForCribWithInput();
+    players[!dealer].selectCardsForCrib(); //non dealer selects cards
+    players[dealer].selectCardsForCrib(); //dealer selects cards
+
     //they are then hidden
     hideCards(&players[dealer].crib);
-
-    //pegging phase
-    peggingRound();
-
     draw();
+    pegger();
+
 }
 
 /*
@@ -57,15 +59,4 @@ switches the dealer
 */
 void switchDealer() {
     dealer = !dealer;
-}
-
-void pegger() {
-    //while the game has not yet been won and 
-    //while all cards have not yet been pegged
-    while (!gameWon && peggingCardsPlayed < PEGGING_CARDS) {
-        players[dealer].playPeggingCard();
-    }
-    if (gameWon) {
-        //deal with this later
-    }
 }
