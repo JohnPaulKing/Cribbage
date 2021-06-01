@@ -9,8 +9,9 @@
 #include "test.c"
 
 int main(int argc, char **argv) {
+    
     gameInit();
-
+    //printDeck();
     //while game isn't won, start the next round
     //at both pegging and scoring, need breaks to check
     singleRound();
@@ -37,13 +38,13 @@ void singleRound(){
     revealCards(&players[0].hand); //flip comp cards
     //wait until player selects their cards to discard
     cutDeck();
-
     players[!dealer].selectCardsForCrib(); //non dealer selects cards
     players[dealer].selectCardsForCrib(); //dealer selects cards
-
+    revealTopCard();
     //they are then hidden
     hideCards(&players[dealer].crib);
     draw();
+    sleep(1); //maybe not necesary?
     pegger();
 }
 

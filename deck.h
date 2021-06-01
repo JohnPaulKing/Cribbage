@@ -3,6 +3,7 @@
 
 #include "card.h"
 #include "player.h"
+#include "scoring.h"
 
 #define DECK_SIZE 52 // #cards
 #define CUT_BUFFER 4 //number of cards on either side that need to be left
@@ -16,5 +17,6 @@ void initDeck(); //create initial deck
 void deal(Hand*,Hand*); //deal 6 cards from deck to each hand
 void cutDeck(); //select a random card from startingAt, until end of deck
 void cutForFirst();
+void revealTopCard();
 
 #endif

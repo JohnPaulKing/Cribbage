@@ -30,7 +30,7 @@ Q, Q, Q, Q, 5, 6
 so the scorer should start at slot 5, and stop at slot 3 when searching
 */
 char tupleCount = 0; //as in there is a match of only 1 card 
-for (char i = peggingCardsPlayed-1; i >= peggingCardsSinceReset; i--) {
+for (char i = peggingCardsPlayed-1; i >= (peggingCardsPlayed-peggingCardsSinceReset); i--) {
     if (pegging[i].card->type == lastPlayed->type) {
         tupleCount++; 
     } else {
@@ -48,28 +48,58 @@ this time the "order" doesn't matter as much (a run can be 6-4-5)
 char* numbers = malloc(8); //allocate space for 8 numbers
 char numbersInRun = 0;
 char runOf = 0; //keeps track of the run size
-for (char i = peggingCardsPlayed-1; i >= peggingCardsSinceReset; i--) {
-    //put the numbers in opposite order (easier for sorting)
-    numbers[numbersInRun++] = pegging[i].card->type;
-    if (isRun(numbers,numbersInRun)) {
-        runOf = numbersInRun; //the run size so far
-    } else {
-        break; //can't continue run
-    }
-} 
-score += runOf; //add the size of the run to the score
-//free them
-free(numbers);
+/*
+At several points I have done conditionals on RUN_LENGTH
+if there have not been 3 cards played since reset, don't even run any of this
+if there have been, don't test the run until you're comparing 3 cards
+
+*/
+if (peggingCardsSinceReset > RUN_LENGTH-1) { //can only be a run with 3 or more cards
+    for (char i = peggingCardsPlayed-1; i >= (peggingCardsPlayed-peggingCardsSinceReset); i--) {
+        //put the numbers in opposite order (easier for sorting)
+        numbers[numbersInRun++] = pegging[i].card->type;
+        if (numbersInRun > RUN_LENGTH-1 && isRun(numbers,numbersInRun)) {
+            runOf = numbersInRun; //the run size so far
+        } 
+    } 
+    score += (runOf > RUN_LENGTH-1) ? runOf : 0 ; //add the size of the run to the score, if less than 3, no run
+    //free them
+    free(numbers);
+}
 
 //console(scoringMessage);
+
 return score;
 }
 
-bool isRun(char* numbers, char quantity) {
+bool isRun(char numbers[], char quantity) {
     //sort them
+    char temp; //for temporarily storing variables
+    char low; //lowest number
+    char lowIndex; //index of lowest card
+    //for each number
+    for (char x = 0; x < quantity; x++) {
+        low = numbers[x]; //keep track of the lowest number ( so far)
+        lowIndex = x;
+        //for each number after
+        for (char y = x+1; y < quantity; y++) { //only move if its lower
+            if (numbers[y] < low) {
+                lowIndex = y; //new lowest
+                low = numbers[lowIndex];
+            }
+        }
+        //now a standard swap using temp
+        temp = numbers[x];
+        numbers[x] = numbers[lowIndex];
+        numbers[lowIndex] = temp;
+    }
 
+    //Now run through sorted array 
+    for (char x = 0; x < quantity-1; x++) {
+        if (numbers[x] != numbers[x+1]-1) {
+            return false; //not a run of <quantity>
+        }
+    }
     //if there is an unbroken chain, return true
-
-    //else false
-    return false;
+    return true;
 }

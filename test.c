@@ -36,3 +36,46 @@ void testCribContents() {
         }
     }
 }
+
+void printDeck() {
+    for (int i = 0; i < 52; i++) {
+        printf("deck: %d = val: %d of suit: %d\n",i,deck[i].type,deck[i].type);
+    }getc(stdin);
+}
+
+void cutOverride() {
+    topCard = &deck[10];
+}
+
+/*
+results in unshuffled deck
+*/
+void shuffleOverride(){
+
+//leave this for manual testing
+shuffled[0] = &deck[0]; //discared
+shuffled[1] = &deck[1]; //discared
+shuffled[2] = &deck[2]; //discared
+shuffled[3] = &deck[3]; //discared
+shuffled[4] = &deck[4]; //second
+shuffled[5] = &deck[5]; //first
+shuffled[6] = &deck[6]; //fourth
+shuffled[7] = &deck[7]; //third
+shuffled[8] = &deck[8]; //kept
+shuffled[9] = &deck[9];
+shuffled[10] = &deck[10]; //kept
+shuffled[11] = &deck[12];
+shuffled[12] = &deck[11]; //cut card
+
+
+/*
+//Leave this for testing with sequences
+
+    //clear shuffled slots first
+    memset(shuffled,0,sizeof(Card*)*DECK_SIZE); //set each pointer to NULL
+    //for all 52 cards
+    for (char i = 0; i < DECK_SIZE; i++) {
+        shuffled[i] = &(deck[i]); //pointer to a card
+    }
+*/
+}

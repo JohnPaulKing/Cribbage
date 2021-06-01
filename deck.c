@@ -71,3 +71,15 @@ void deal(Hand* hand0,Hand* hand1) {
         hand1->cardsInHand++; // increase number of cards
     }
 }
+
+/*
+This function just "flips" the card that has already been "cut" by the algorithm
+*/
+void revealTopCard() {
+    topCard->hidden = false; //reveal the top card (cut card)
+    if (topCard->type == JACK) {
+        //2 points for jack cut
+        players[dealer].score += HEELS_SCORE;
+        console("Two For His Heels");
+    }
+}
