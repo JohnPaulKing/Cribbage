@@ -54,7 +54,7 @@ void pegger () {
     //and while game not won
     char numberAdded; //the "value of the card" played, face value for A-10, 10 for j,q,k
     bool go = false; // simbolizes that last player said "go"
-    for (currentPegger = !dealer ;!gameWon && peggingCardsPlayed < CRIB_SIZE*2; ) {
+    for (currentPegger = !dealer ;!gameWon && peggingCardsPlayed < PEGGING_TOTAL; ) {
         numberAdded= players[currentPegger].playPeggingCard(); //whether player able to play card
         //play pegging card also calls sendCardToPegging
         if (numberAdded) { //a card is sucessfully played (0 if no card played)
@@ -64,23 +64,31 @@ void pegger () {
             peggingCount += numberAdded; //add the value of the pegged card to the total. if 15, and a J is played, count is 25
             pegging[peggingCardsPlayed-1].points = scorePegging(); //calculate the scoring of last card played
             players[currentPegger].score += pegging[peggingCardsPlayed-1].points; //adds the point of last card played
-            draw(); //draw screen
+
+            //check if last card played
+            if (peggingCardsPlayed == PEGGING_TOTAL) {
+                players[currentPegger].score += GO; //add point for "last"
+                pegging[peggingCardsPlayed-1].points += GO; //represent this on the card visually
+            }
+            
             if (players[currentPegger].score >= WIN_NUMBER) {
                 gameWon = true; //game has been won, return
                 return;
             }
             
         } else if (go) { //if last player said go
+            //points already given for 31, would not get a "go"
+            if (peggingCount != PEGGING_RESET) {
+                players[currentPegger].score += GO; //points for go
+                pegging[peggingCardsPlayed-1].points += GO; //represent this visually
+            } 
             go = false; //reset
             peggingCount = 0; //reset the counter
             peggingCardsSinceReset = 0;
-            players[currentPegger].score += GO; //points for go go (or last)
-            pegging[peggingCardsPlayed].points += GO; //represent this visually
         } else {
             go = true; //unable to play
         }
         currentPegger = !currentPegger; // switch the pegging player
-        
     }
     console("Press enter to continue to scoring");
     //return cards to hands

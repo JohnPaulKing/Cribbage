@@ -45,7 +45,6 @@ void singleRound(){
     hideCards(&players[dealer].crib);
     draw();
     pegger();
-    printf("player 0 score: %d\n",players[0].score);
 }
 
 /*

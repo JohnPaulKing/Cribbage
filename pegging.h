@@ -5,7 +5,7 @@
 #include "card.h"
 #include "scoring.h"
 
-
+#define PEGGING_TOTAL 8 //number of peggable cards
 
 //Each pegging slot holds a card, but also has an owner
 typedef struct {

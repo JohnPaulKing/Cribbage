@@ -10,5 +10,6 @@
 const char TUPLE_SCORES[] = {0,0,2,6,12};
 
 char scorePegging(); //count the points gained by a pegging card
+bool isRun(char*, char); //given an array of numbers, 
 
 #endif
