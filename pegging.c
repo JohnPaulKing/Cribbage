@@ -1,6 +1,8 @@
 #include "pegging.h"
 #include "game.h"
 #include "player.h"
+#include <stdio.h>
+
 
 /*
 A small function to test if a card can be played during pegging
@@ -27,8 +29,9 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
     pegging[peggingCardsPlayed].card = hand->cards[index];
     //keep track of owner
     pegging[peggingCardsPlayed].owner = owner;
-    pegging[peggingCardsPlayed].points = 1;
+    pegging[peggingCardsPlayed].points = 0; //this gets updated later
     peggingCardsPlayed++; //increase global var to account for card added
+    peggingCardsSinceReset++; //same deal
     
     //now remove the card from the hand
 
@@ -43,6 +46,8 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
 }
 
 void pegger () {
+    //reset values
+    peggingCardsPlayed = peggingCardsSinceReset = 0;
 
     //start with non-dealer
     //while all cards have not yet been pegged
@@ -51,13 +56,16 @@ void pegger () {
     bool go = false; // simbolizes that last player said "go"
     for (currentPegger = !dealer ;!gameWon && peggingCardsPlayed < CRIB_SIZE*2; ) {
         numberAdded= players[currentPegger].playPeggingCard(); //whether player able to play card
+        //play pegging card also calls sendCardToPegging
         if (numberAdded) { //a card is sucessfully played (0 if no card played)
             /*
             todo, get scoring of last card played
             */
             peggingCount += numberAdded; //add the value of the pegged card to the total. if 15, and a J is played, count is 25
+            pegging[peggingCardsPlayed-1].points = scorePegging(); //calculate the scoring of last card played
+            players[currentPegger].score += pegging[peggingCardsPlayed-1].points; //adds the point of last card played
             draw(); //draw screen
-            if (players[0].score >= WIN_NUMBER) {
+            if (players[currentPegger].score >= WIN_NUMBER) {
                 gameWon = true; //game has been won, return
                 return;
             }
@@ -65,20 +73,24 @@ void pegger () {
         } else if (go) { //if last player said go
             go = false; //reset
             peggingCount = 0; //reset the counter
+            peggingCardsSinceReset = 0;
             players[currentPegger].score += GO; //points for go go (or last)
+            pegging[peggingCardsPlayed].points += GO; //represent this visually
         } else {
             go = true; //unable to play
         }
         currentPegger = !currentPegger; // switch the pegging player
         
     }
-    if (gameWon) {
-        //deal with this later
-    }
+    console("Press enter to continue to scoring");
     //return cards to hands
     for (char i = 0; i < peggingCardsPlayed; i++) {
         bool owner = pegging[i].owner;
-        players[owner].hand.cards[players[owner].hand.cardsInHand] = pegging[i].card; //give card back to owner
+        players[owner].hand.cards[players[owner].hand.cardsInHand++] = pegging[i].card; //give card back to owner
+        //also increment the cards in hand
         pegging[i] = (PeggingSlot) {NULL,0,0}; //reset the pegging slot
     }
+    
+    getc(stdin);
+    console(" ");
 }

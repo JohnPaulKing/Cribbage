@@ -19,7 +19,7 @@ int screenSize[] = {BOARD_HEIGHT,BOARD_WIDTH}; //row, column
 enum gameMessages {BILL_HAND_TXT,PLAYER_HAND_TXT,CRIB_TXT,DECK_TXT,POINTS_TXT,PEGGING_TXT,SCORE_TXT,PLAYER_TXT,BILL_TXT,CONSOLE_TXT}; //output types correspond to a message
 
 //Each string that needs to be printed
-char *gameMessages[] = {"Bill's Hand","Player's Hand","Crib","Deck","Points: ","Pegging","Score","Player: ","Bill","Console: "};
+char *gameMessages[] = {"Bill's Hand","Player's Hand","Crib","Deck","Points: ","Pegging","Score","Player: ","Bill: ","Console: "};
 
 char consoleMessage[BOARD_WIDTH]; //Message that displays current information about game
 
@@ -43,7 +43,7 @@ struct position positions[] = {  {1,15}, {1,45}, //player 1 hand and crib text
                                  {10,20}, {10,30},//pegging text, and current count
                                  {12,0}, {12,55}, //pegging cards, score text
                                  {12,50}, {12,58}, //player 1 score text, score
-                                 {13,50}, {13,70}, //player 2 score text, score
+                                 {13,50}, {13,58}, //player 2 score text, score
                                  {14,0}, //pegging points {UNUSED}
                                  {18,15}, {18,45}, //player 2 hand and crib text
                                  {19,0}, {19,38}, //player 2 hand and crib

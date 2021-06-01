@@ -3,6 +3,7 @@
 #include "deck.c"
 #include "player.c"
 #include "pegging.c"
+#include "scoring.c"
 #include <locale.h> //unicode
 #include <stdio.h> //std out
 #include "test.c"
@@ -44,7 +45,7 @@ void singleRound(){
     hideCards(&players[dealer].crib);
     draw();
     pegger();
-
+    printf("player 0 score: %d\n",players[0].score);
 }
 
 /*

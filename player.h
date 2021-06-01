@@ -3,6 +3,7 @@
 
 #include "card.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 #define NAME_LENGTH 10 //# char permissible in a player name
 #define HAND_SIZE 6 //starting cards in hand

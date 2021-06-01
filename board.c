@@ -50,7 +50,7 @@ void setPosForPegging(){
         char y = positions[PEGGING_CARDS].y + pegging[i].owner; //offset slightly based on who played card
         char x = positions[PEGGING_CARDS].x + ((CARD_WIDTH+3)*i); //offset for each card
         setPosForCard(&pegging[i].card,y,x); //set position
-        y += (pegging[i].owner) ? 4 : -1; //offset to either above or below card
+        y += (pegging[i].owner) ? 3 : -1; //offset to either above or below card
         x+=2; //center of the card
         //set positions manually
         board[y][x].ptr = &pegging[i].points;
@@ -67,8 +67,9 @@ void draw(){
 
         for (int x = 0; x < BOARD_WIDTH; ) { //don't increase x here
             node = &board[y][x];
-            if (node->ptr) { //if valid pointer
-                if (node->type == NUMBER) {
+            //check if pointer is valid, and if it is a number, that the number is non-0
+            if (node->ptr){ //if valid pointer
+                if (node->type == NUMBER ){ 
                     //print as dereferenced int pointer
                     //print as 3 numbers always
                     char str[BUFFER_SIZE];
@@ -227,12 +228,6 @@ void setPosForHand(Hand* hand, enum POSITIONS pos, char size){
 
 void console(char* message) {
     strcpy(consoleMessage,message); //copy the message to correct position
-}
-
-/*
-Clear the console message
-*/
-void clearConsole() {
-    strcpy (consoleMessage,"");
+    draw(); //redraw frame with new message
 }
 

@@ -35,6 +35,8 @@ unsigned char pegWithCPU(){
     /* TODO
     Add logic, for now just pick first card
     */
+   console("CPU selecting card");
+   sleep(1);
    unsigned char value; //this will hold the 1-10 value of a card
    Hand* hand = &players[0].hand; 
    //for each card
@@ -56,6 +58,7 @@ This function verifies that the card is legally playable
 if the player has no options, they may press enter for go
 */
 unsigned char pegWithInput() {
+    console("select a card to peg"); //print message
     //first check if any cards are legally playable
     Hand* hand = &players[1].hand; 
     unsigned char value; //this will hold the 1-10 value of a card
@@ -78,13 +81,14 @@ unsigned char pegWithInput() {
     } else {
         return 0; //no cards playable
     }
+    clearConsole();
 }
 
 /*
 select to cards with 
 */
 void selectCardsForCribWithInput(){
-    console("select a card"); //print message
+    console("select a card for the crib"); //print message
     selectCard(&players[1]); //player 1 selects first card
     sendCardToCrib(&players[1].hand, players[1].selectedCard);
     selectCard(&players[1]); //player 1 selects first card
@@ -196,4 +200,7 @@ void playersInit() {
     players[1].playPeggingCard = &pegWithInput;
     players[1].selectCardsForCrib = &selectCardsForCribWithInput;
     players[0].playPeggingCard = &pegWithCPU;
+
+    players[1].score=0;
+    players[0].score=0;
 }
