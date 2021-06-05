@@ -29,8 +29,8 @@ void gameInit() {
 }
 
 void singleRound(){
-    //shuffleDeck();
-    shuffleOverride();
+    shuffleDeck();
+    //shuffleOverride();
     //deal 6 cards to each player
     deal(&players[0].hand,&players[1].hand);
     //cut the deck (not revealed until after selection)

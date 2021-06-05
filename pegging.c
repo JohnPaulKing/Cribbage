@@ -88,9 +88,12 @@ void pegger () {
             go = true; //unable to play
         }
         currentPegger = !currentPegger; // switch the pegging player
+        draw();
     }
     clrConsole();
     console("Press enter to continue to scoring");
+    draw();
+    getc(stdin);
     //return cards to hands
     for (char i = 0; i < peggingCardsPlayed; i++) {
         bool owner = pegging[i].owner;
@@ -99,8 +102,4 @@ void pegger () {
         pegging[i] = (PeggingSlot) {NULL,0,0}; //reset the pegging slot
     }
     peggingCardsPlayed = peggingCount = 0;
-   
-    
-    getc(stdin);
-    console(" ");
 }

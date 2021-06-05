@@ -116,39 +116,43 @@ char scoreHand(Hand* hand) {
     hand->cards[hand->cardsInHand++] = topCard;
 
     //now calculate each type of points (and print them)
-    temp + score15(hand);
+    temp = score15(hand);
     score += temp;
     if (temp) {
-        sprintf(messsageBuffer,"Fifteens: %d, ",score);
+        sprintf(messsageBuffer,"Fifteens: %d, ",temp);
         console(messsageBuffer);
     }
 
     temp = scoreNobs(hand) * NOB_SCORE;
     score += temp;
     if (temp) {
-        sprintf(messsageBuffer,"Nobs: %d, ",score);
+        sprintf(messsageBuffer,"Nobs: %d, ",temp);
         console(messsageBuffer);
     }
     //score += scoreRuns(hand);
     temp = scoreTuples(hand);
     score += temp;
     if (temp) {
-        sprintf(messsageBuffer,"Tuples: %d, ",score);
+        sprintf(messsageBuffer,"Tuples: %d, ",temp);
         console(messsageBuffer);
     }
     temp = scoreFlush(hand);
     score += temp;
     if (temp) {
-        sprintf(messsageBuffer,"Flush: %d ",score);
+        sprintf(messsageBuffer,"Flush: %d, ",temp);
         console(messsageBuffer);
     }
+    //now print the total
+    sprintf(messsageBuffer,"Total: %d, ",score);
+    console(messsageBuffer);
 
     //reverse what we did earlier
     //decrease cards in hand, set 5th to NULL
     hand->cards[--hand->cardsInHand] = NULL;
     hand->points += score; //mark points scored in hand
-    getc(stdin);
     draw();
+    getc(stdin);
+    
     return score;
 }
 
@@ -223,7 +227,7 @@ char scoreFlush(Hand* hand) {
     Suit suit = hand->cards[0]->suit; 
     // go through each card in hand
     for (char i = 0; i < hand->cardsInHand-1; i++) {
-        if ( hand->cards[0]->suit == suit) {
+        if ( hand->cards[i]->suit == suit) {
             run++;
         } else {
             //as soon as one doesn't match, run is over
@@ -248,4 +252,5 @@ void scoringPhase() {
     clrConsole();
     console("Dealer crib: ");
     players[dealer].score += scoreHand(&players[dealer].crib);
+    //getc(stdin);
 }
