@@ -15,6 +15,8 @@ void initDeck() {
             deck[deckIndex].type = number;
             deck[deckIndex].hidden = true;
             deck[deckIndex].selected = false;
+             //value either number value, or 10 for face card
+            deck[deckIndex].value= (number > 10) ? 10: number;
             deckIndex++; //increase to next slot
         }
     }
@@ -45,15 +47,8 @@ from startingAt, until end of deck
 set that card as cut card
 */
 void cutDeck() {
-    //must leave a buffer of cards on each side
-    //starts at hand_size*2 because that many cards have been "dealt" from the top
-    char low = (HAND_SIZE*2) + CUT_BUFFER; //16
-    char high = DECK_SIZE - CUT_BUFFER - 1; //47
-    //randomly generate a card
-    char indexOfCut = rand()%(high-low);
-    //offset it by adding low
-    indexOfCut+=low;
-    topCard = shuffled[indexOfCut]; //move card to "top"
+    //this just picks the next card that isn't dealt
+    topCard = shuffled[HAND_SIZE*2]; 
 }
 
 /*

@@ -29,13 +29,13 @@ void gameInit() {
 }
 
 void singleRound(){
-    shuffleDeck();
+    //shuffleDeck();
+    shuffleOverride();
     //deal 6 cards to each player
     deal(&players[0].hand,&players[1].hand);
     //cut the deck (not revealed until after selection)
     //reveal the cards for the player
     revealCards(&players[1].hand); //flip human players cards
-    revealCards(&players[0].hand); //flip comp cards
     //wait until player selects their cards to discard
     cutDeck();
     players[!dealer].selectCardsForCrib(); //non dealer selects cards
@@ -46,6 +46,10 @@ void singleRound(){
     draw();
     sleep(1); //maybe not necesary?
     pegger();
+    //revealCards(&players[0].hand); //flip comp cards
+    revealCards(&players[dealer].crib);
+    scoringPhase();
+    draw();
 }
 
 /*

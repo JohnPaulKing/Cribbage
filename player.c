@@ -9,6 +9,7 @@ void revealCards(Hand* hand ) {
     for (char i = 0; i < hand->cardsInHand; i++) {
         hand->cards[i]->hidden = false;
     }
+    //draw();
 }
 
 //makes all cards in hand hidden
@@ -16,6 +17,7 @@ void hideCards(Hand* hand ) {
     for (char i = 0; i < hand->cardsInHand; i++) {
         hand->cards[i]->hidden = true;
     }
+    //draw();
 }
 
 char countCardsInCrib(Player* player) {
@@ -35,6 +37,7 @@ unsigned char pegWithCPU(){
     /* TODO
     Add logic, for now just pick first card
     */
+   clrConsole();
    console("CPU selecting card");
    sleep(1);
    unsigned char value; //this will hold the 1-10 value of a card
@@ -58,6 +61,7 @@ This function verifies that the card is legally playable
 if the player has no options, they may press enter for go
 */
 unsigned char pegWithInput() {
+    clrConsole();
     console("select a card to peg"); //print message
     //first check if any cards are legally playable
     Hand* hand = &players[1].hand; 
@@ -81,13 +85,13 @@ unsigned char pegWithInput() {
     } else {
         return 0; //no cards playable
     }
-    clearConsole();
 }
 
 /*
 select to cards with 
 */
 void selectCardsForCribWithInput(){
+    clrConsole();
     console("select a card for the crib"); //print message
     selectCard(&players[1]); //player 1 selects first card
     sendCardToCrib(&players[1].hand, players[1].selectedCard);

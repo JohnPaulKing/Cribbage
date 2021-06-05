@@ -1,5 +1,3 @@
 TODO:
-Add slight delay to computers turn
-add point calculation to pegging (and point assignment)
-fix "go" working incorrectly at times
+Score calculation
 

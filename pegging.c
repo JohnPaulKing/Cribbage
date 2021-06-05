@@ -10,7 +10,7 @@ It also returns the number value of the card, if playable
 */
 char cardPeggable(Card* card) {
     //if the value of the card is over 10 (J,Q,or K, then it is 10 for pegging purposes)
-    char value = (card->type > 10) ? 10 : card->type;
+    char value = card->value;
     if (value + peggingCount <= PEGGING_RESET) { //if the card doesnt go over 31
         return value;
     } else { //otherwise return a 0
@@ -27,6 +27,7 @@ As it is now, this is slighly redundant but might help with code clarity
 void sendCardToPegging(Hand* hand, char index, bool owner) {
     //copy card pointer to peggingslot
     pegging[peggingCardsPlayed].card = hand->cards[index];
+    pegging[peggingCardsPlayed].card->hidden = false;
     //keep track of owner
     pegging[peggingCardsPlayed].owner = owner;
     pegging[peggingCardsPlayed].points = 0; //this gets updated later
@@ -58,15 +59,13 @@ void pegger () {
         numberAdded= players[currentPegger].playPeggingCard(); //whether player able to play card
         //play pegging card also calls sendCardToPegging
         if (numberAdded) { //a card is sucessfully played (0 if no card played)
-            /*
-            todo, get scoring of last card played
-            */
+            go = false;
             peggingCount += numberAdded; //add the value of the pegged card to the total. if 15, and a J is played, count is 25
             pegging[peggingCardsPlayed-1].points = scorePegging(); //calculate the scoring of last card played
             players[currentPegger].score += pegging[peggingCardsPlayed-1].points; //adds the point of last card played
 
-            //check if last card played
-            if (peggingCardsPlayed == PEGGING_TOTAL) {
+            //check if last card played (and did not hit 31)
+            if (peggingCardsPlayed == PEGGING_TOTAL && peggingCount != PEGGING_RESET) {
                 players[currentPegger].score += GO; //add point for "last"
                 pegging[peggingCardsPlayed-1].points += GO; //represent this on the card visually
             }
@@ -76,7 +75,7 @@ void pegger () {
                 return;
             }
             
-        } else if (go) { //if last player said go
+        } else if (go) { //if last player said go, and this player cant go
             //points already given for 31, would not get a "go"
             if (peggingCount != PEGGING_RESET) {
                 players[currentPegger].score += GO; //points for go
@@ -90,6 +89,7 @@ void pegger () {
         }
         currentPegger = !currentPegger; // switch the pegging player
     }
+    clrConsole();
     console("Press enter to continue to scoring");
     //return cards to hands
     for (char i = 0; i < peggingCardsPlayed; i++) {
@@ -98,6 +98,8 @@ void pegger () {
         //also increment the cards in hand
         pegging[i] = (PeggingSlot) {NULL,0,0}; //reset the pegging slot
     }
+    peggingCardsPlayed = peggingCount = 0;
+   
     
     getc(stdin);
     console(" ");

@@ -23,6 +23,8 @@ char *gameMessages[] = {"Bill's Hand","Player's Hand","Crib","Deck","Points: ","
 
 char consoleMessage[BOARD_WIDTH]; //Message that displays current information about game
 
+char messsageBuffer[100]; //A buffer for the scoring messages (easier to input numbers and such)
+
 //positions of each element on the board
 
 //x,y pair for beginning of each element
@@ -95,6 +97,6 @@ void setPosForHand(Hand*, enum POSITIONS, char); //set the position for each car
 void setPosForCard(void*,int,int); //set position for an individual card
 void setPosForPegging(); //set positions for a pegging slot, containing a card and points
 void console(char*); //print a message to console
-void clearConsole();
+void clrConsole();
 
 #endif

@@ -227,7 +227,12 @@ void setPosForHand(Hand* hand, enum POSITIONS pos, char size){
 }
 
 void console(char* message) {
-    strcpy(consoleMessage,message); //copy the message to correct position
+    strcat(consoleMessage,message); //copy the message to correct position
+    draw(); //redraw frame with new message
+}
+
+void clrConsole() {
+    strcpy(consoleMessage," "); //copy a blank space
     draw(); //redraw frame with new message
 }
 
