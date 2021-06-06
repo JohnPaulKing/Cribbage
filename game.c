@@ -55,7 +55,7 @@ bool singleRound(){
         return 0; //end round (and game)
     }
     draw();
-    collectCards(&players[!dealer].hand, &players[dealer].crib, &players[dealer].crib);
+    collectCards(&players[!dealer].hand, &players[dealer].hand, &players[dealer].crib);
     dealer = !dealer; //switch 
     return 1;
 }
@@ -74,8 +74,6 @@ return -1 otherwise
 char gameWon() {
     for (char i = 0; i < 2; i++) {
         if (players[i].score > WIN_NUMBER) {
-            printf("game won!!!");
-            sleep(5);
             return i;
         }
     } return -1;

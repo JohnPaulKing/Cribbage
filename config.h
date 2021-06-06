@@ -3,7 +3,7 @@
 
 #define BOARD_WIDTH 70
 #define BOARD_HEIGHT 25
-#define CLEAR 0
+#define CLEAR 1
 
 //typedef enum {EASY, MODERATE, HARD};
 

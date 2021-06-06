@@ -38,20 +38,22 @@ unsigned char pegWithCPU(){
     Add logic, for now just pick first card
     */
    clrConsole();
+   
    console("CPU selecting card");
    sleep(1);
    unsigned char value; //this will hold the 1-10 value of a card
    Hand* hand = &players[0].hand; 
    //for each card
    for (char i = 0; i < hand->cardsInHand; i++) { 
-       if (value = cardPeggable(hand->cards[i])) { //if card playable
+       if (value = cardPeggable(hand->cards[i]) ) { //if card playable
         sendCardToPegging(hand, i, 0); //send card at index i in hand to pegging slot
         //above function takes care of math, etc
         //at this point, this function just needs to return the amount (number) added to pegging count
         return value;
-       } //end of loop, with no card played and value returned
+       } 
+           //end of loop, with no card played and value returned
        //therefor we coudldn't play a card
-   }  return 0;
+   } return 0;
 }
 
 

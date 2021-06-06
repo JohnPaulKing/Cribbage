@@ -86,6 +86,7 @@ void collectCards(Hand* hand0, Hand* hand1, Hand* crib) {
         hand0->cards[i]->hidden = true;
         hand1->cards[i]->hidden = true;
         crib->cards[i]->hidden = true;
+        topCard->hidden = true;
         //remove refs
         hand0->cards[i] = NULL;
         hand1->cards[i] = NULL;

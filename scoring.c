@@ -148,7 +148,7 @@ char scoreHand(Hand* hand) {
         console(messsageBuffer);
     }
     //now print the total
-    sprintf(messsageBuffer,"Total: %d, ",score);
+    sprintf(messsageBuffer,"Total: %d ",score);
     console(messsageBuffer);
 
     //reverse what we did earlier
@@ -327,7 +327,6 @@ bool scoringPhase() {
     players[!dealer].score += scoreHand(&players[!dealer].hand);
     //check if this gave this player enough points to win
     if (gameWon() > -1) {
-        printf("game won during scoring human\n"); sleep(5);
         return 0;
     }
     clrConsole();
@@ -338,7 +337,6 @@ bool scoringPhase() {
     players[dealer].score += scoreHand(&players[dealer].crib);
     //getc(stdin);
     if (gameWon() > -1) {
-        printf("game won during score comp\n"); sleep(5);
         return 0;
     } else {
         return 1;

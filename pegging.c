@@ -33,7 +33,6 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
     pegging[peggingCardsPlayed].points = 0; //this gets updated later
     peggingCardsPlayed++; //increase global var to account for card added
     peggingCardsSinceReset++; //same deal
-    
     //now remove the card from the hand
 
     //collapse hand
@@ -48,7 +47,8 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
 
 bool pegger () {
     //reset values
-    peggingCardsPlayed = peggingCardsSinceReset = 0;
+    peggingCardsPlayed = 0;
+    peggingCardsSinceReset = 0;
 
     //start with non-dealer
     //while all cards have not yet been pegged
@@ -63,7 +63,6 @@ bool pegger () {
             peggingCount += numberAdded; //add the value of the pegged card to the total. if 15, and a J is played, count is 25
             pegging[peggingCardsPlayed-1].points = scorePegging(); //calculate the scoring of last card played
             players[currentPegger].score += pegging[peggingCardsPlayed-1].points; //adds the point of last card played
-
             //check if last card played (and did not hit 31)
             if (peggingCardsPlayed == PEGGING_TOTAL && peggingCount != PEGGING_RESET) {
                 players[currentPegger].score += GO; //add point for "last"
@@ -71,10 +70,8 @@ bool pegger () {
             }
             
             if (gameWon() >= 0) {
-                //printf("game won during pegging\n"); sleep(5);
                 return 0; //indicates that game was won during pegging
             }
-            
         } else if (go) { //if last player said go, and this player cant go
             //points already given for 31, would not get a "go"
             if (peggingCount != PEGGING_RESET) {

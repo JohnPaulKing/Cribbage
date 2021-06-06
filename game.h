@@ -5,7 +5,7 @@
 #include "card.h"
 #include "pegging.h"
 
-#define WIN_NUMBER 121 //needed to win
+#define WIN_NUMBER 120 //needed to win (one less)
 #define RESET 31 // 
 #define PEGGING_CARD_AMOUNT 8 //number of cards that can be played during pegging
 #define PLAYER_COUNT 2 //number of players
