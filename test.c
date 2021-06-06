@@ -98,7 +98,7 @@ deck: 51 = val: 13 of suit: 13
 }
 
 void cutOverride() {
-    topCard = &deck[10];
+    topCard = &deck[4];
 }
 
 /*
@@ -116,16 +116,16 @@ void shuffleOverride(){
     //leave this for manual testing
     */
    shuffleDeck();
-shuffled[0] = &deck[0]; //discared
-shuffled[1] = &deck[1]; //discared
-shuffled[2] = &deck[2]; //discared
-shuffled[3] = &deck[3]; //discared
-shuffled[4] = &deck[48]; //second (comp)
-shuffled[5] = &deck[22]; //first (player)
-shuffled[6] = &deck[49]; //fourth (comp) //go
-shuffled[7] = &deck[23]; //third (player)
-shuffled[8] = &deck[50]; //6th (comp)
-shuffled[9] = &deck[24]; //5th (player)
-shuffled[10] = &deck[51]; //8th (comp)
-shuffled[11] = &deck[25]; //7th (player)
+shuffled[0] = &deck[51]; //discared
+shuffled[1] = &deck[50]; //discared
+shuffled[2] = &deck[49]; //discared
+shuffled[3] = &deck[10]; //discared
+shuffled[4] = &deck[0]; //second (comp)
+shuffled[5] = &deck[10]; //first (player)
+shuffled[6] = &deck[1]; //fourth (comp) //go
+shuffled[7] = &deck[17]; //third (player)
+shuffled[8] = &deck[2]; //6th (comp)
+shuffled[9] = &deck[30]; //5th (player)
+shuffled[10] = &deck[15]; //8th (comp)
+shuffled[11] = &deck[43]; //7th (player)
 }

@@ -98,5 +98,6 @@ void setPosForCard(void*,int,int); //set position for an individual card
 void setPosForPegging(); //set positions for a pegging slot, containing a card and points
 void console(char*); //print a message to console
 void clrConsole();
+void announceWin(Player*,Player*); //print out who won, with how many points, etc
 
 #endif

@@ -44,6 +44,15 @@ void boardInit() {
 }
 
 void setPosForPegging(){
+    /*
+    First remove all exisiting points in the region of -1 - 4
+    */
+   for (char y = -1 + positions[PEGGING_CARDS].y; y < 5 + positions[PEGGING_CARDS].y; y++) {
+       for (char x = 0 + positions[PEGGING_CARDS].x; x < 8*6 + positions[PEGGING_CARDS].x; x++) {
+           board[y][x].type = 0; //reset type
+           board[y][x].ptr = NULL; //null pointer
+       }
+   }
     //for each pegging card
     for (char i = 0; i < peggingCardsPlayed; i++) {
         //first set positions for the card
@@ -61,7 +70,9 @@ void setPosForPegging(){
 void draw(){
     printf("%s",RESET_COLOR); //default color
     setPosForPegging(); //set dynamically set pegging cards
-    system("clear"); //clear console
+    if (CLEAR) {
+        system("clear"); //clear console
+    }
     Printable *node;
     for (int y = 0; y < BOARD_HEIGHT; y++) {
 
@@ -232,5 +243,11 @@ void console(char* message) {
 
 void clrConsole() {
     strcpy(consoleMessage," "); //copy a blank space
+}
+
+void announceWin(Player* winner, Player* loser) {
+    system("clear"); //clear console
+    printf("Congratulations to player %s for winning %d to %d", winner->name, winner->score, loser->score);
+    getc(stdin);
 }
 

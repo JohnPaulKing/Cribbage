@@ -174,6 +174,8 @@ Send a card from a hand to the crib
 Also must move subsequent cards down, and make null
 */
 void sendCardToCrib(Hand* hand, char index) {
+    //hide card
+    hand->cards[index]->hidden = true;
     //copy card pointer to crib
     players[dealer].crib.cards[countCardsInCrib(&players[dealer])] = hand->cards[index];
     players[dealer].crib.cardsInHand++; //increase
@@ -207,4 +209,7 @@ void playersInit() {
 
     players[1].score=0;
     players[0].score=0;
+
+    strcpy(players[0].name,"Bill");
+    strcpy(players[1].name,"JP");
 }

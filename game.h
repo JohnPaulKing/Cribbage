@@ -23,7 +23,6 @@ char peggingCount = 0; // starts at 0, resets at 31
 bool currentPegger; //which player must play a pegging card (if able)
 
 bool dealer = 0; //0 or 1
-bool gameWon = false; //true when game ends
 
 
 int main(); //main, starting point for game
@@ -32,6 +31,7 @@ void gameInit(); // initiate the board and deck
     //set each player
 void cutForFirst();
 void switchDealer();
-void singleRound();
+bool singleRound();
+char gameWon(); //return -1 if game not won
 
 #endif

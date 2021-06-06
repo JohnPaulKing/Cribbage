@@ -46,7 +46,7 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
     hand->cardsInHand--;//decrease
 }
 
-void pegger () {
+bool pegger () {
     //reset values
     peggingCardsPlayed = peggingCardsSinceReset = 0;
 
@@ -55,7 +55,7 @@ void pegger () {
     //and while game not won
     char numberAdded; //the "value of the card" played, face value for A-10, 10 for j,q,k
     bool go = false; // simbolizes that last player said "go"
-    for (currentPegger = !dealer ;!gameWon && peggingCardsPlayed < PEGGING_TOTAL; ) {
+    for (currentPegger = !dealer ; peggingCardsPlayed < PEGGING_TOTAL; ) {
         numberAdded= players[currentPegger].playPeggingCard(); //whether player able to play card
         //play pegging card also calls sendCardToPegging
         if (numberAdded) { //a card is sucessfully played (0 if no card played)
@@ -70,9 +70,9 @@ void pegger () {
                 pegging[peggingCardsPlayed-1].points += GO; //represent this on the card visually
             }
             
-            if (players[currentPegger].score >= WIN_NUMBER) {
-                gameWon = true; //game has been won, return
-                return;
+            if (gameWon() >= 0) {
+                //printf("game won during pegging\n"); sleep(5);
+                return 0; //indicates that game was won during pegging
             }
             
         } else if (go) { //if last player said go, and this player cant go
@@ -87,7 +87,7 @@ void pegger () {
         } else {
             go = true; //unable to play
         }
-        currentPegger = !currentPegger; // switch the pegging player
+        currentPegger = !currentPegger; // switc h the pegging player
         draw();
     }
     clrConsole();
@@ -102,4 +102,5 @@ void pegger () {
         pegging[i] = (PeggingSlot) {NULL,0,0}; //reset the pegging slot
     }
     peggingCardsPlayed = peggingCount = 0;
+    return 1; //indicates that game will continue after pegging
 }

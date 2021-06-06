@@ -129,11 +129,16 @@ char scoreHand(Hand* hand) {
         sprintf(messsageBuffer,"Nobs: %d, ",temp);
         console(messsageBuffer);
     }
-    //score += scoreRuns(hand);
+    temp = scoreRuns(hand);
+    score += temp;
+    if (temp) {
+        sprintf(messsageBuffer,"Runs: %d, ",temp);
+        console(messsageBuffer);
+    }
     temp = scoreTuples(hand);
     score += temp;
     if (temp) {
-        sprintf(messsageBuffer,"Tuples: %d, ",temp);
+        sprintf(messsageBuffer,"Pairs: %d, ",temp);
         console(messsageBuffer);
     }
     temp = scoreFlush(hand);
@@ -242,10 +247,89 @@ char scoreFlush(Hand* hand) {
     return run;
 }
 
-void scoringPhase() {
+char scoreRuns(Hand* hand) {
+    //create a temporary array of numbers
+    char numbers[hand->cardsInHand];
+    for (char i = 0; i < hand->cardsInHand; i++) {
+        numbers[i] = hand->cards[i]->type;
+    }
+    //sort them
+    char temp; //for temporarily storing variables
+    char low; //lowest number
+    char lowIndex; //index of lowest card
+    //for each number
+    for (char x = 0; x < 5; x++) {
+        low = numbers[x]; //keep track of the lowest number ( so far)
+        lowIndex = x;
+        //for each number after
+        for (char y = x+1; y < 5; y++) { //only move if its lower
+            if (numbers[y] < low) {
+                lowIndex = y; //new lowest
+                low = numbers[lowIndex];
+            }
+        }
+        //now a standard swap using temp
+        temp = numbers[x];
+        numbers[x] = numbers[lowIndex];
+        numbers[lowIndex] = temp;
+    }
+
+    char runLength = 1;
+    char runMultiplier = 1;
+    char runNotation[5] = {1,0,0,0,0};
+    //Now run through sorted array 
+    for (char x = 1; x < 5; x++) {
+        if (numbers[x] == numbers[x-1]) {
+            runNotation[runLength-1]++;
+            //if next number 1 higher
+        } else if (numbers[x] == numbers[x-1] + 1) {
+            runNotation[runLength++]++;
+        } else {
+            if (runLength < 3) {
+                runLength = 1;
+                runMultiplier = 1;
+                runNotation[0] = 1; //run starting here
+                for (char i = 1; i < hand->cardsInHand; i++) {
+                    runNotation[i] = 0;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    //calculate run modifier
+    //this is a little complicated, but the idea is only return a number if its greater than 3
+    if (runLength > 2) {
+        for (char i = 0; i < 5; i++) {
+            if (runNotation[i] > 2) {
+                runMultiplier = 3;
+            } else if (runNotation[i] > 1) {
+                runMultiplier = runMultiplier * 2;
+            }
+        }
+    } else {
+        runMultiplier = 0; //as in, there is no run of 3 here
+    }
+
+    //return the run amount times the multiplier (single, double, triple) if over 3
+    return runLength * runMultiplier;
+}
+
+/*
+each hand is scored
+returns true if the game will continue
+returns false upon a player win
+*/
+bool scoringPhase() {
     clrConsole();
     console("Non-dealer hand: ");
     players[!dealer].score += scoreHand(&players[!dealer].hand);
+    //check if this gave this player enough points to win
+    if (gameWon() > -1) {
+        printf("game won during scoring human\n"); sleep(5);
+        return 0;
+    }
     clrConsole();
     console("Dealer hand: ");
     players[dealer].score += scoreHand(&players[dealer].hand);
@@ -253,4 +337,10 @@ void scoringPhase() {
     console("Dealer crib: ");
     players[dealer].score += scoreHand(&players[dealer].crib);
     //getc(stdin);
+    if (gameWon() > -1) {
+        printf("game won during score comp\n"); sleep(5);
+        return 0;
+    } else {
+        return 1;
+    }
 }

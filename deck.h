@@ -18,5 +18,6 @@ void deal(Hand*,Hand*); //deal 6 cards from deck to each hand
 void cutDeck(); //select a random card from startingAt, until end of deck
 void cutForFirst();
 void revealTopCard();
+void collectCards(Hand*, Hand*, Hand*);
 
 #endif

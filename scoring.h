@@ -28,6 +28,6 @@ char scoreRuns(Hand*); //calculates runs
 char scoreFlush(Hand*); //checks if hand contains a flush of a suit
 char count15(Hand*, char, char);
 char countTuples(Hand*,char);
-void scoringPhase();
+bool scoringPhase();
 
 #endif

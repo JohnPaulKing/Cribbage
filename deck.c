@@ -78,3 +78,21 @@ void revealTopCard() {
         console("Two For His Heels");
     }
 }
+
+void collectCards(Hand* hand0, Hand* hand1, Hand* crib) {
+    //nullify the crib
+    for (char i = 0; i < crib->cardsInHand; i++) {
+        //hide all cards
+        hand0->cards[i]->hidden = true;
+        hand1->cards[i]->hidden = true;
+        crib->cards[i]->hidden = true;
+        //remove refs
+        hand0->cards[i] = NULL;
+        hand1->cards[i] = NULL;
+        crib->cards[i] = NULL;
+    }
+    //recount
+    crib->cardsInHand = 0;
+    hand0->cardsInHand = 0;
+    hand1->cardsInHand = 0;
+}

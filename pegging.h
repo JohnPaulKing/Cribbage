@@ -14,7 +14,7 @@ typedef struct {
     unsigned char points; // points that this card gained
 } PeggingSlot;
 
-void pegger(); //each player takes turns pegging (using functions from player)
+bool pegger(); //each player takes turns pegging (using functions from player)
 bool verifyPlayableCard(Card*); //verify that a certain card may be played during pegging
 char cardPeggable(Card*); //test if a card is peggable (can be played during pegging?)
 void sendCardToPegging(Hand*, char, bool); // take a card out of a hand, and place it in a pegging slot
