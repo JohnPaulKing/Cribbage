@@ -13,7 +13,7 @@ void initDeck() {
             //initialize all variables
             deck[deckIndex].suit = suit;
             deck[deckIndex].type = number;
-            deck[deckIndex].hidden = true;
+            deck[deckIndex].hidden = HIDE_CARDS;
             deck[deckIndex].selected = false;
              //value either number value, or 10 for face card
             deck[deckIndex].value= (number > 10) ? 10: number;
@@ -56,6 +56,7 @@ deal cards into each hand
 alternate putting deck pointers into each hand
 */
 void deal(Hand* hand0,Hand* hand1) {
+    topCardRevealed = false;
     char cardIndex = 0;
     for (char i = 0; i < HAND_SIZE; i++) {
         //set the card ptr in each hand
@@ -77,16 +78,17 @@ void revealTopCard() {
         players[dealer].score += HEELS_SCORE;
         console("Two For His Heels");
     }
+    topCardRevealed = true;
 }
 
 void collectCards(Hand* hand0, Hand* hand1, Hand* crib) {
     //nullify the crib
     for (char i = 0; i < crib->cardsInHand; i++) {
         //hide all cards
-        hand0->cards[i]->hidden = true;
-        hand1->cards[i]->hidden = true;
-        crib->cards[i]->hidden = true;
-        topCard->hidden = true;
+        hand0->cards[i]->hidden = HIDE_CARDS;
+        hand1->cards[i]->hidden = HIDE_CARDS;
+        crib->cards[i]->hidden = HIDE_CARDS;
+        topCard->hidden = HIDE_CARDS;
         //remove refs
         hand0->cards[i] = NULL;
         hand1->cards[i] = NULL;

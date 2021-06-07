@@ -11,6 +11,7 @@
 Card deck[DECK_SIZE]; //alot deck size
 Card *shuffled[DECK_SIZE]; //shuffled pointers to each card in deck. 
 Card *topCard; //points to a card somewhere in the deck, to simulate cut
+bool topCardRevealed = false; //true once flipped, false again at deal
 
 void shuffleDeck(); //arrange card pointers in shuffled randomly
 void initDeck(); //create initial deck

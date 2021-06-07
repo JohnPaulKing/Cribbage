@@ -108,55 +108,60 @@ bool isRun(char numbers[], char quantity) {
 This function goes through hand and calculates all points
 when a hand is passed in, the top card is added as a temporary 5th card
 */
-char scoreHand(Hand* hand) {
+char scoreHand(Hand* hand, bool printMode) {
     char temp; //hold a value before added to hand
     char score = 0; //score for hand
     //first add the top card
     //also increment the number of cards in hand
-    hand->cards[hand->cardsInHand++] = topCard;
-
+    if(topCardRevealed) {
+        hand->cards[hand->cardsInHand++] = topCard;
+    }
     //now calculate each type of points (and print them)
     temp = score15(hand);
     score += temp;
-    if (temp) {
+    if (temp && printMode) {
         sprintf(messsageBuffer,"Fifteens: %d, ",temp);
         console(messsageBuffer);
     }
-
-    temp = scoreNobs(hand) * NOB_SCORE;
-    score += temp;
-    if (temp) {
-        sprintf(messsageBuffer,"Nobs: %d, ",temp);
-        console(messsageBuffer);
+    if (topCardRevealed) {
+        temp = scoreNobs(hand) * NOB_SCORE;
+        score += temp;
+        if (temp && printMode) {
+            sprintf(messsageBuffer,"Nobs: %d, ",temp);
+            console(messsageBuffer);
+        }
     }
     temp = scoreRuns(hand);
     score += temp;
-    if (temp) {
+    if (temp && printMode) {
         sprintf(messsageBuffer,"Runs: %d, ",temp);
         console(messsageBuffer);
     }
     temp = scoreTuples(hand);
     score += temp;
-    if (temp) {
+    if (temp && printMode) {
         sprintf(messsageBuffer,"Pairs: %d, ",temp);
         console(messsageBuffer);
     }
     temp = scoreFlush(hand);
     score += temp;
-    if (temp) {
+    if (temp && printMode) {
         sprintf(messsageBuffer,"Flush: %d, ",temp);
         console(messsageBuffer);
     }
+    if (topCardRevealed) {
+        //reverse what we did earlier
+        //decrease cards in hand, set 5th to NULL
+        hand->cards[--hand->cardsInHand] = NULL;
+        hand->points += score; //mark points scored in hand
+    }
     //now print the total
-    sprintf(messsageBuffer,"Total: %d ",score);
-    console(messsageBuffer);
-
-    //reverse what we did earlier
-    //decrease cards in hand, set 5th to NULL
-    hand->cards[--hand->cardsInHand] = NULL;
-    hand->points += score; //mark points scored in hand
-    draw();
-    getc(stdin);
+    if (printMode) {
+        sprintf(messsageBuffer,"Total: %d ",score);
+        console(messsageBuffer);
+        draw();
+        getc(stdin);
+    }
     
     return score;
 }
@@ -241,7 +246,7 @@ char scoreFlush(Hand* hand) {
     }
     //now check for the last card
     //if it matches the suit, add a point
-    if (hand->cards[hand->cardsInHand-1]->suit == suit) {
+    if ( topCardRevealed && topCard->suit == suit) {
         run++;
     }
     return run;
@@ -258,11 +263,11 @@ char scoreRuns(Hand* hand) {
     char low; //lowest number
     char lowIndex; //index of lowest card
     //for each number
-    for (char x = 0; x < 5; x++) {
+    for (char x = 0; x < hand->cardsInHand; x++) {
         low = numbers[x]; //keep track of the lowest number ( so far)
         lowIndex = x;
         //for each number after
-        for (char y = x+1; y < 5; y++) { //only move if its lower
+        for (char y = x+1; y < hand->cardsInHand; y++) { //only move if its lower
             if (numbers[y] < low) {
                 lowIndex = y; //new lowest
                 low = numbers[lowIndex];
@@ -278,7 +283,7 @@ char scoreRuns(Hand* hand) {
     char runMultiplier = 1;
     char runNotation[5] = {1,0,0,0,0};
     //Now run through sorted array 
-    for (char x = 1; x < 5; x++) {
+    for (char x = 1; x < hand->cardsInHand; x++) {
         if (numbers[x] == numbers[x-1]) {
             runNotation[runLength-1]++;
             //if next number 1 higher
@@ -301,7 +306,7 @@ char scoreRuns(Hand* hand) {
     //calculate run modifier
     //this is a little complicated, but the idea is only return a number if its greater than 3
     if (runLength > 2) {
-        for (char i = 0; i < 5; i++) {
+        for (char i = 0; i < hand->cardsInHand; i++) {
             if (runNotation[i] > 2) {
                 runMultiplier = 3;
             } else if (runNotation[i] > 1) {
@@ -324,17 +329,17 @@ returns false upon a player win
 bool scoringPhase() {
     clrConsole();
     console("Non-dealer hand: ");
-    players[!dealer].score += scoreHand(&players[!dealer].hand);
+    players[!dealer].score += scoreHand(&players[!dealer].hand, true);
     //check if this gave this player enough points to win
     if (gameWon() > -1) {
         return 0;
     }
     clrConsole();
     console("Dealer hand: ");
-    players[dealer].score += scoreHand(&players[dealer].hand);
+    players[dealer].score += scoreHand(&players[dealer].hand, true);
     clrConsole();
     console("Dealer crib: ");
-    players[dealer].score += scoreHand(&players[dealer].crib);
+    players[dealer].score += scoreHand(&players[dealer].crib, true);
     //getc(stdin);
     if (gameWon() > -1) {
         return 0;

@@ -161,14 +161,47 @@ void selectCard(Player* player) {
 Select two cards to send to the crib
 */
 void selectCardsForCribWithCPU() {
-    //for now select first two cards
-    //later replace this with AI
+    Hand* hand = &players[0].hand;
+    Hand* tempHand = malloc(sizeof(Card*) * 5); //hand we are going to send for scoring
+    //for easy difficulty, just select first two cards
+    if (GAME_DIFFICULTY == EASY) {
+        sendCardToCrib(hand, 0);
+        sendCardToCrib(hand, 0);
+        //medium and hard difficulty both do calculations, to detirmine parts of the score
+    } else {
+        char highX = 0;
+        char highY = 0;
+        char highScore = 0;
+        //try each possible subset of four cards
+        for (char x = 0; x < hand->cardsInHand-1; x++) {
+            for (char y = x+1; y < hand->cardsInHand; y++) {
+                //final loop, where we add all of the applicable cards to a temporary hand
+                printf("in  x-y\n");
+                memset(tempHand->cards, 0, sizeof(Card*)); //reset the temphand
+                tempHand->cardsInHand = 0;
+                for (char z = 0;  z < hand->cardsInHand; z++) {
+                    //if z isnt one of the two indices we are discarding
+                    if (z != x && z != y) {
+                        //add to the tempHand
+                        tempHand->cards[tempHand->cardsInHand++] = hand->cards[z];
+                    }
+                }
+                //now for the temporary list, score it, and save the highest score
+                char score = scoreHand(tempHand,false);
+                if (score > highScore) {
+                    highScore = score;
+                    highX = x;
+                    highY = y;
+                }
+            }
+        }
+        //now send the cards that net the highest points
+        //first send higher card, so that you don't have to reset lower
+        sendCardToCrib(hand,highY);
+        sendCardToCrib(hand,highX);
 
-    //if the second index is after the first, 
-    //it needs to have one subtracted from it
-    //to account for the "collapsing"
-    sendCardToCrib(&players[0].hand, 0);
-    sendCardToCrib(&players[0].hand, 0);
+        free(tempHand); //release memory
+    }
 }
 
 /*

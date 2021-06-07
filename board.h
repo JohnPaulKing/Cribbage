@@ -9,10 +9,17 @@
 #include <locale.h> //unicode
 #include <wchar.h> //unicode
 
+#define BOARD_WIDTH 70
+#define BOARD_HEIGHT 25
+
 //escape sequences for changing colors
 const char const *RED = "\x1B[31m";
 const char const *GREEN = "\x1B[32m";
 const char const *RESET_COLOR = "\x1b[36m";
+
+//don't change these
+const int CARD_WIDTH = 3; //minimum 3 (adds two for edges)
+const int CARD_HEIGHT = 3;
 
 int screenSize[] = {BOARD_HEIGHT,BOARD_WIDTH}; //row, column
 
