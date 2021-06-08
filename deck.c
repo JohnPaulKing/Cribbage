@@ -56,7 +56,6 @@ deal cards into each hand
 alternate putting deck pointers into each hand
 */
 void deal(Hand* hand0,Hand* hand1) {
-    topCardRevealed = false;
     char cardIndex = 0;
     for (char i = 0; i < HAND_SIZE; i++) {
         //set the card ptr in each hand
@@ -76,9 +75,10 @@ void revealTopCard() {
     if (topCard->type == JACK) {
         //2 points for jack cut
         players[dealer].score += HEELS_SCORE;
+        clrConsole();
         console("Two For His Heels");
+        getc(stdin);
     }
-    topCardRevealed = true;
 }
 
 void collectCards(Hand* hand0, Hand* hand1, Hand* crib) {
@@ -93,6 +93,11 @@ void collectCards(Hand* hand0, Hand* hand1, Hand* crib) {
         hand0->cards[i] = NULL;
         hand1->cards[i] = NULL;
         crib->cards[i] = NULL;
+
+        //remove points
+        hand0->points = 0;
+        hand1->points =0;
+        crib->points = 0;
     }
     //recount
     crib->cardsInHand = 0;

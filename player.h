@@ -40,5 +40,6 @@ void sendCardToCrib(Hand*, char); //send a card from a hand to crib, and remove 
 char countCardsInCrib(Player*); //returns number of cards in this players crib
 void selectCard(Player*); //change the selected card in a players hand
 void playersInit();
+bool inHand(Hand*,Card*); //returns true if the card argument is contained in the hand
 
 #endif

@@ -162,7 +162,8 @@ Select two cards to send to the crib
 */
 void selectCardsForCribWithCPU() {
     Hand* hand = &players[0].hand;
-    Hand* tempHand = malloc(sizeof(Card*) * 5); //hand we are going to send for scoring
+    Hand* tempHand = malloc(sizeof(Hand)); //hand we are going to send for scoring
+    Hand* discardHand = malloc(sizeof(Hand));
     //for easy difficulty, just select first two cards
     if (GAME_DIFFICULTY == EASY) {
         sendCardToCrib(hand, 0);
@@ -171,23 +172,70 @@ void selectCardsForCribWithCPU() {
     } else {
         char highX = 0;
         char highY = 0;
-        char highScore = 0;
+        int highScore = 0;
         //try each possible subset of four cards
         for (char x = 0; x < hand->cardsInHand-1; x++) {
             for (char y = x+1; y < hand->cardsInHand; y++) {
                 //final loop, where we add all of the applicable cards to a temporary hand
-                printf("in  x-y\n");
-                memset(tempHand->cards, 0, sizeof(Card*)); //reset the temphand
+                memset(tempHand->cards, 0, sizeof(Card*) * 5); //reset the temphand
                 tempHand->cardsInHand = 0;
+                memset(discardHand->cards, 0, sizeof(Card*) * 3); //reset the temphand
+                discardHand->cardsInHand = 0;
                 for (char z = 0;  z < hand->cardsInHand; z++) {
                     //if z isnt one of the two indices we are discarding
                     if (z != x && z != y) {
                         //add to the tempHand
                         tempHand->cards[tempHand->cardsInHand++] = hand->cards[z];
+                    } else {
+                        discardHand->cards[discardHand->cardsInHand++] = hand->cards[z];
                     }
                 }
-                //now for the temporary list, score it, and save the highest score
-                char score = scoreHand(tempHand,false);
+                //on hard difficulty, we want to calculate our hand with the potential points it could score
+                int score = 0;
+                if (GAME_DIFFICULTY == HARD) {
+                    //for each card in the deck
+                    for (char i1 = 0; i1 < DECK_SIZE-2 ; i1++) { //this card will be top card
+                        //if the card is not in the hypothetical hand
+                        if (!inHand(tempHand, &deck[i1])) {
+                            //calculate the score
+                            int handScore = scoreHand(tempHand,false,&deck[i1]);
+                            int cribScore = 0;
+                            //now calculate the crib score average
+                            for (char i2 = i1+1; i2 < DECK_SIZE-1; i2++) { //this will be one of the discarded cards
+                                if (!inHand(tempHand, &deck[i2])) {
+                                    for (char i3 = i2+1; i3 < DECK_SIZE-2; i3++) {
+                                        if (!inHand(tempHand, &deck[i3])) { //this will be one of the discarded cards
+                                            //experiment with these discarded (crib) cards
+                                            discardHand->cards[discardHand->cardsInHand++] = &deck[i2];
+                                            discardHand->cards[discardHand->cardsInHand++] = &deck[i3];
+                                            cribScore = scoreHand(discardHand,false,&deck[i1]); 
+                                            score += handScore; //add the handscore
+                                            score += cribScore * (dealer) ? -1 : 1; //add (or subtract) the crib score
+                                            //remove the last two "discarded" cards
+                                            discardHand->cards[--discardHand->cardsInHand] = NULL;
+                                            discardHand->cards[--discardHand->cardsInHand] = NULL;
+                                        }
+                                    }
+                                }
+                            }
+                            //add the score
+                            //the score starts to become somewhat "meaningless"
+                            //since its the total number of points for each possible cut card
+                            //however, the larger number directly corresponds to a better hand
+                            //either add or remove points for dealers crib
+                            //score += scoreHand(discardHand,false,&deck[i1])* (dealer) ? -1 : 1 ;
+                        }
+                    }
+                    //if difficulty is medium, we only want to score cards in hand
+                } else {
+                    //now for the temporary list, score it, and save the highest score
+                    //we are not speculating about the top card, and do not know it
+                    //so we pass it in as null
+                    //we also don't wish it to print
+                    score = scoreHand(tempHand,false, NULL);
+                }
+                //this commented out function is useful for a glimpse of the calculation
+                //printf("score for x %d and y %d = %d\n",x,y,score);
                 if (score > highScore) {
                     highScore = score;
                     highX = x;
@@ -201,7 +249,21 @@ void selectCardsForCribWithCPU() {
         sendCardToCrib(hand,highX);
 
         free(tempHand); //release memory
+        free(discardHand);
     }
+}
+
+/*
+Iterates through hand
+if card in second arg matches the card in the hand, return true
+if its not, returns false
+*/
+bool inHand(Hand* hand, Card* card) {
+    for (char i = 0; i < hand->cardsInHand; i++) {
+        if (hand->cards[i]->suit == card->suit && hand->cards[i]->type == card->type ) {
+            return true;
+        }
+    } return false;
 }
 
 /*

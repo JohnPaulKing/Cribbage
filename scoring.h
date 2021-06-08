@@ -20,12 +20,12 @@ const char TUPLE_SCORES[] = {0,0,2,6,12};
 
 char scorePegging(); //count the points gained by a pegging card
 bool isRun(char[], char); //given an array of numbers, 
-char scoreHand(Hand*, bool); //given a hand pointer, calculate number of points
+char scoreHand(Hand*, bool, Card*); //given a hand pointer, calculate number of points
 char score15(Hand*); //count number of combinations of 15
-bool scoreNobs(Hand*); //returns either a 1 or 0 to represent nobs or no nobs
+bool scoreNobs(Hand*, Card*); //returns either a 1 or 0 to represent nobs or no nobs
 char scoreTuples(Hand*); //calculates points for any cards that match 1 or more other cards
 char scoreRuns(Hand*); //calculates runs
-char scoreFlush(Hand*); //checks if hand contains a flush of a suit
+char scoreFlush(Hand*, Card*); //checks if hand contains a flush of a suit
 char count15(Hand*, char, char);
 char countTuples(Hand*,char);
 bool scoringPhase();

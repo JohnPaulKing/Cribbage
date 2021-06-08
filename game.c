@@ -41,8 +41,8 @@ bool singleRound(){
     //wait until player selects their cards to discard
     cutDeck();
     printf("cut deck\n");
-    players[!dealer].selectCardsForCrib(); //non dealer selects cards
-    players[dealer].selectCardsForCrib(); //dealer selects cards
+    players[1].selectCardsForCrib(); //person selects their cards
+    players[0].selectCardsForCrib(); //computer selects their cards
     revealTopCard();
     draw();
     sleep(1); //maybe not necesary?

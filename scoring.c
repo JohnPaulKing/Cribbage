@@ -108,12 +108,29 @@ bool isRun(char numbers[], char quantity) {
 This function goes through hand and calculates all points
 when a hand is passed in, the top card is added as a temporary 5th card
 */
-char scoreHand(Hand* hand, bool printMode) {
+char scoreHand(Hand* hand, bool printMode, Card* topCard) {
     char temp; //hold a value before added to hand
     char score = 0; //score for hand
-    //first add the top card
+
+    //first we'll score flushes, passing in our topCard
+    temp = scoreFlush(hand, topCard);
+    score += temp;
+    if (temp && printMode) {
+        sprintf(messsageBuffer,"Flush: %d, ",temp);
+        console(messsageBuffer);
+    }
+    //similarly, pass in our top card to score nobs
+    temp = scoreNobs(hand, topCard) * NOB_SCORE;
+    score += temp;
+    if (temp && printMode) {
+        sprintf(messsageBuffer,"Nobs: %d, ",temp);
+        console(messsageBuffer);
+    }
+    
+
+    //now for the rest of scoringtreat the top card as just another card
     //also increment the number of cards in hand
-    if(topCardRevealed) {
+    if(topCard) {
         hand->cards[hand->cardsInHand++] = topCard;
     }
     //now calculate each type of points (and print them)
@@ -122,14 +139,6 @@ char scoreHand(Hand* hand, bool printMode) {
     if (temp && printMode) {
         sprintf(messsageBuffer,"Fifteens: %d, ",temp);
         console(messsageBuffer);
-    }
-    if (topCardRevealed) {
-        temp = scoreNobs(hand) * NOB_SCORE;
-        score += temp;
-        if (temp && printMode) {
-            sprintf(messsageBuffer,"Nobs: %d, ",temp);
-            console(messsageBuffer);
-        }
     }
     temp = scoreRuns(hand);
     score += temp;
@@ -143,13 +152,7 @@ char scoreHand(Hand* hand, bool printMode) {
         sprintf(messsageBuffer,"Pairs: %d, ",temp);
         console(messsageBuffer);
     }
-    temp = scoreFlush(hand);
-    score += temp;
-    if (temp && printMode) {
-        sprintf(messsageBuffer,"Flush: %d, ",temp);
-        console(messsageBuffer);
-    }
-    if (topCardRevealed) {
+    if (topCard) {
         //reverse what we did earlier
         //decrease cards in hand, set 5th to NULL
         hand->cards[--hand->cardsInHand] = NULL;
@@ -193,13 +196,16 @@ char count15(Hand* hand, char index, char amount) {
 Checks hand to see if it has a jack that matches the top card (cut card)
 if so, a point is added for nobs
 */
-bool scoreNobs(Hand* hand) {
-    //make sure we don't check the last card, in case its a jack
-    for (char i = 0;i < hand->cardsInHand-1; i++ ) {
-        if (hand->cards[i]->type == JACK && hand->cards[i]->suit == topCard->suit) {
-            return 1; //can only ever be one point for nobs
-        }
-    } return 0; //no nobs
+bool scoreNobs(Hand* hand, Card* topCard) {
+    if (topCard) {
+        //make sure we don't check the last card, in case its a jack
+        for (char i = 0;i < hand->cardsInHand; i++ ) {
+            if (hand->cards[i]->type == JACK && hand->cards[i]->suit == topCard->suit) {
+                return 1; //can only ever be one point for nobs
+            }
+        } 
+    } 
+    return 0; //no nobs
 }
 
 /*
@@ -231,12 +237,12 @@ or those four, plus the top card
 this algorithm is simple: mark how many cards after the first match the first
 optionally this can include the top (last) card, for an extra point
 */
-char scoreFlush(Hand* hand) {
+char scoreFlush(Hand* hand, Card* topCard) {
     char run = 0; //how many consecutive cards are of suit s
     //mark the first suit
     Suit suit = hand->cards[0]->suit; 
     // go through each card in hand
-    for (char i = 0; i < hand->cardsInHand-1; i++) {
+    for (char i = 0; i < hand->cardsInHand; i++) {
         if ( hand->cards[i]->suit == suit) {
             run++;
         } else {
@@ -244,9 +250,16 @@ char scoreFlush(Hand* hand) {
             return 0; 
         }
     }
-    //now check for the last card
+    /*
+        We have to do this check because some of the scoring hands are done
+        on hands with less than 4 cards
+    */
+    if (run < CRIB_SIZE) {
+        return 0; 
+    }
+    //now check for the top card(if it exists)
     //if it matches the suit, add a point
-    if ( topCardRevealed && topCard->suit == suit) {
+    if ( topCard && topCard->suit == suit) {
         run++;
     }
     return run;
@@ -329,17 +342,17 @@ returns false upon a player win
 bool scoringPhase() {
     clrConsole();
     console("Non-dealer hand: ");
-    players[!dealer].score += scoreHand(&players[!dealer].hand, true);
+    players[!dealer].score += scoreHand(&players[!dealer].hand, true, topCard);
     //check if this gave this player enough points to win
     if (gameWon() > -1) {
         return 0;
     }
     clrConsole();
     console("Dealer hand: ");
-    players[dealer].score += scoreHand(&players[dealer].hand, true);
+    players[dealer].score += scoreHand(&players[dealer].hand, true, topCard);
     clrConsole();
     console("Dealer crib: ");
-    players[dealer].score += scoreHand(&players[dealer].crib, true);
+    players[dealer].score += scoreHand(&players[dealer].crib, true, topCard);
     //getc(stdin);
     if (gameWon() > -1) {
         return 0;
