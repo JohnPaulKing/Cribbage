@@ -41,19 +41,54 @@ unsigned char pegWithCPU(){
    
    console("CPU selecting card");
    sleep(1);
-   unsigned char value; //this will hold the 1-10 value of a card
+   unsigned char value = 0; //this will hold the 1-10 value of a card
+   char index = -1; //index of the card selected
    Hand* hand = &players[0].hand; 
    //for each card
-   for (char i = 0; i < hand->cardsInHand; i++) { 
-       if (value = cardPeggable(hand->cards[i]) ) { //if card playable
-        sendCardToPegging(hand, i, 0); //send card at index i in hand to pegging slot
-        //above function takes care of math, etc
-        //at this point, this function just needs to return the amount (number) added to pegging count
-        return value;
-       } 
-           //end of loop, with no card played and value returned
-       //therefor we coudldn't play a card
-   } return 0;
+    if (GAME_DIFFICULTY == EASY) {
+        for (char i = 0; i < hand->cardsInHand; i++) { 
+            if (value = cardPeggable(hand->cards[i]) ) { //if card playable
+                sendCardToPegging(hand, i, 0); //send card at index i in hand to pegging slot
+                //above function takes care of math, etc
+                //at this point, this function just needs to return the amount (number) added to pegging count
+                index = i;
+                break; //break the loop
+            } 
+                //end of loop, with no card played and value returned
+            //therefor we coudldn't play a card
+        } 
+        //medium or hard difficulty is more complicated
+    } else {
+        char bestScore = 0;
+        char tempValue = 0;
+        char tempScore = 0;
+
+        //run through each card
+        for (char i = 0; i < hand->cardsInHand; i++) { 
+            //make sure card playable
+            if (tempValue = cardPeggable(hand->cards[i]) ) {
+                //see the hypothetical score
+                //if its higher than the previous one (save the value to tempScore)
+                if ( (tempScore = testCardForPegging(hand,i,tempValue)) > bestScore || index == -1) {
+                    index = i; //use this index
+                    bestScore = tempScore;
+                    value = tempValue;
+                }
+                //make sure that if a card is playable, index is not -1
+            } 
+        } 
+        //now that we have tested all, select the optimal card
+        if (index > -1) {
+            printf("sending card %d to pegging adding to count %d\n",index,value);
+            sendCardToPegging(hand, index, 0); //send card at index i in hand to pegging slot
+        } else {
+            printf("unable to select, returning val of %d\n",value);
+        }
+    }
+    //return either the value of the selected index, or 0 if unable
+    return value;
+
+
 }
 
 

@@ -77,6 +77,7 @@ void revealTopCard() {
         players[dealer].score += HEELS_SCORE;
         clrConsole();
         console("Two For His Heels");
+        draw();
         getc(stdin);
     }
 }

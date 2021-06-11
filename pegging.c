@@ -45,6 +45,27 @@ void sendCardToPegging(Hand* hand, char index, bool owner) {
     hand->cardsInHand--;//decrease
 }
 
+/*
+This function tests the score of a card in a hand without "playing" it
+This can't account for points for a go, 
+*/
+char testCardForPegging(Hand* hand, char index, char value) {
+    //copy card to pegging
+    pegging[peggingCardsPlayed++].card = hand->cards[index];
+    //we don't need to remove card from hand, because it isn't actually played
+    //this needs to be increased for scoring alg to work
+    peggingCardsSinceReset++;
+    peggingCount += value;
+
+    char score = scorePegging();
+
+    pegging[--peggingCardsPlayed].card = NULL;
+    //decrease, since cards wasn't actually "played"
+    peggingCardsSinceReset--;
+    peggingCount -= value;
+    return score;
+}
+
 bool pegger () {
     //reset values
     peggingCardsPlayed = 0;
