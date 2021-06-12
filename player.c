@@ -2,6 +2,7 @@
 #include "game.h"
 #include "board.h"
 #include "pegging.h"
+#include "config.h"
 
 
 //makes all cards visible
@@ -40,6 +41,7 @@ unsigned char pegWithCPU(){
    clrConsole();
    
    console("CPU selecting card");
+   draw();
    sleep(1);
    unsigned char value = 0; //this will hold the 1-10 value of a card
    char index = -1; //index of the card selected
@@ -79,10 +81,8 @@ unsigned char pegWithCPU(){
         } 
         //now that we have tested all, select the optimal card
         if (index > -1) {
-            printf("sending card %d to pegging adding to count %d\n",index,value);
             sendCardToPegging(hand, index, 0); //send card at index i in hand to pegging slot
         } else {
-            printf("unable to select, returning val of %d\n",value);
         }
     }
     //return either the value of the selected index, or 0 if unable
@@ -117,6 +117,9 @@ unsigned char pegWithInput() {
             if (value = cardPeggable(hand->cards[players[1].selectedCard])) { //if card is playable
                 sendCardToPegging(hand, players[1].selectedCard, 1); //send card at index i in hand to pegging slot
                 return value; 
+            } else {
+                clrConsole();
+                console("Cannot play selected card");
             }
         }
     } else {
@@ -342,6 +345,6 @@ void playersInit() {
     players[1].score=0;
     players[0].score=0;
 
-    strcpy(players[0].name,"Bill");
-    strcpy(players[1].name,"JP");
+    strcpy(players[0].name,COMPUTER_NAME);
+    strcpy(players[1].name,PLAYER_NAME);
 }

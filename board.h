@@ -9,7 +9,7 @@
 #include <locale.h> //unicode
 #include <wchar.h> //unicode
 
-#define BOARD_WIDTH 70
+#define BOARD_WIDTH 80
 #define BOARD_HEIGHT 25
 
 //escape sequences for changing colors
@@ -23,10 +23,11 @@ const int CARD_HEIGHT = 3;
 
 int screenSize[] = {BOARD_HEIGHT,BOARD_WIDTH}; //row, column
 
-enum gameMessages {BILL_HAND_TXT,PLAYER_HAND_TXT,CRIB_TXT,DECK_TXT,POINTS_TXT,PEGGING_TXT,SCORE_TXT,PLAYER_TXT,BILL_TXT,CONSOLE_TXT}; //output types correspond to a message
+enum gameMessages {BILL_HAND_TXT,PLAYER_HAND_TXT,DECK_TXT,POINTS_TXT,PEGGING_TXT,SCORE_TXT,PLAYER_TXT,BILL_TXT,CONSOLE_TXT}; //output types correspond to a message
 
 //Each string that needs to be printed
-char *gameMessages[] = {"Bill's Hand","Player's Hand","Crib","Deck","Points: ","Pegging","Score","Player: ","Bill: ","Console: "};
+char *gameMessages[] = {"Bill's Hand","Player's Hand","Deck","Points: ","Pegging","Score","Player: ","Bill: ","Console: "};
+char dealerMessages[2][13] = {"Dealer's Crib",""};
 
 char consoleMessage[BOARD_WIDTH]; //Message that displays current information about game
 
@@ -46,6 +47,7 @@ this is mapped to a list of printable objects (which have a pointer to some memo
 */
 struct position positions[] = {  {1,15}, {1,45}, //player 1 hand and crib text
                                  {2,0}, {2,38}, //player 1 hand and crib
+                                 {3,60}, //player 1 dealer text
                                  {5,0}, {5,8}, {5,40}, {5,48}, //player 1 points
                                  {7,0}, //deck text
                                  {8,0}, //deck
@@ -56,6 +58,7 @@ struct position positions[] = {  {1,15}, {1,45}, //player 1 hand and crib text
                                  {14,0}, //pegging points {UNUSED}
                                  {18,15}, {18,45}, //player 2 hand and crib text
                                  {19,0}, {19,38}, //player 2 hand and crib
+                                 {20,60},
                                  {22,0}, {22,8}, {22,40}, {22,48}, //player 2 points
                                  {24,0} //console
 };
@@ -64,6 +67,7 @@ Based on the board outlined in map.h
 */ 
 enum POSITIONS {PLAYER1_TEXT,PLAYER1_CRIB_TEXT,
                 PLAYER1_HAND,PLAYER1_CRIB,
+                PLAYER1_DEALER_TAG,
                 PLAYER1_POINTS_TEXT,PLAYER1_POINTS,PLAYER1_CRIB_POINTS_TEXT,PLAYER1_CRIB_POINTS, //PLAYER 1 SECTION
                 DECK_TEXT,
                 DECK,
@@ -74,6 +78,7 @@ enum POSITIONS {PLAYER1_TEXT,PLAYER1_CRIB_TEXT,
                 PEGGING_POINTS, 
                 PLAYER2_TEXT,PLAYER2_CRIB_TEXT,
                 PLAYER2_HAND,PLAYER2_CRIB,
+                PLAYER2_DEALER_TAG,
                 PLAYER2_POINTS_TEXT,PLAYER2_POINTS,PLAYER2_CRIB_POINTS_TEXT,PLAYER2_CRIB_POINTS, //PLAYER 2 SECTION
                 CONSOLE //console prints out additional game messages to player
 }; 

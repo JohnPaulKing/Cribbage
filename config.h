@@ -1,14 +1,22 @@
 #ifndef CONFIG_H
 #define CONFIG_H
+#include "game.h"
 
-#define CLEAR 0
+//whether to clear the screen before reprinting board
+bool CLEAR_SCREEN_ON_REFRESH = true;
 
 
+//EASY, MODERATE, HARD
+//OR 0, 1, 2
+Difficulty GAME_DIFFICULTY = HARD;
 
-//difficulty
-typedef enum {EASY, MODERATE, HARD} difficulty;
-difficulty GAME_DIFFICULTY = HARD;
-bool HIDE_CARDS = false;
+//Player names
+const char *const PLAYER_NAME = "Player";
+const char *const COMPUTER_NAME = "JP";
+
+
+//For debugging, this can be set to false to see the computer's cards
+bool HIDE_CARDS = true;
 
 
 

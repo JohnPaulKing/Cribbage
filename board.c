@@ -6,9 +6,11 @@
 
 void boardInit() {
     char *locale = setlocale(LC_ALL, ""); //set up unicode printing
+    //set the non dealers text box to " "
+    //we start both at "Dealer's Crib" to ensure they each have enough space in the stack
     //set positions of text on data map
     setPos(TEXT,PLAYER1_TEXT,gameMessages[BILL_HAND_TXT]);
-    setPos(TEXT,PLAYER1_CRIB_TEXT,gameMessages[CRIB_TXT]);
+    setPos(TEXT,PLAYER1_CRIB_TEXT,dealerMessages[0]);
     setPos(TEXT,PLAYER1_POINTS_TEXT,gameMessages[POINTS_TXT]);
     setPos(TEXT,PLAYER1_CRIB_POINTS_TEXT,gameMessages[POINTS_TXT]);
     setPos(TEXT,DECK_TEXT,gameMessages[DECK_TXT]);
@@ -19,7 +21,7 @@ void boardInit() {
     setPos(TEXT,PLAYER1_SCORE_TEXT,gameMessages[BILL_TXT]);
     setPos(TEXT,PLAYER2_SCORE_TEXT,gameMessages[PLAYER_TXT]);
     setPos(TEXT,PLAYER2_TEXT,gameMessages[PLAYER_HAND_TXT]);
-    setPos(TEXT,PLAYER2_CRIB_TEXT,gameMessages[CRIB_TXT]);
+    setPos(TEXT,PLAYER2_CRIB_TEXT,dealerMessages[1]);
     setPos(TEXT,PLAYER2_POINTS_TEXT,gameMessages[POINTS_TXT]);
     setPos(TEXT,PLAYER2_CRIB_POINTS_TEXT,gameMessages[POINTS_TXT]);
     setPos(TEXT,CONSOLE,consoleMessage);
@@ -70,7 +72,7 @@ void setPosForPegging(){
 void draw(){
     printf("%s",RESET_COLOR); //default color
     setPosForPegging(); //set dynamically set pegging cards
-    if (CLEAR) {
+    if (CLEAR_SCREEN_ON_REFRESH) {
         system("clear"); //clear console
     }
     Printable *node;
@@ -102,6 +104,10 @@ void draw(){
                 } else if (node->type == TEXT) {
                     printf("%s",(char*) (node->ptr));
                     x+= strlen((char*) (node->ptr));
+                    //in case text empty
+                    if (!strlen((char*) (node->ptr))) {
+                        x++;//move along
+                    }
                 }
             } else {
                 x++; //increase one space

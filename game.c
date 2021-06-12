@@ -56,8 +56,16 @@ bool singleRound(){
     }
     draw();
     collectCards(&players[!dealer].hand, &players[dealer].hand, &players[dealer].crib);
-    dealer = !dealer; //switch 
+    switchDealer();
     return 1;
+}
+
+void switchDealer() {
+    //clear the first dealer message
+    strcpy(dealerMessages[dealer],"");
+    dealer = !dealer; //switch 
+    //add the dealer tag to the new dealer
+    strcpy(dealerMessages[dealer],"Dealer's Crib");
 }
 
 /*
@@ -79,9 +87,3 @@ char gameWon() {
     } return -1;
 }
 
-/*
-switches the dealer
-*/
-void switchDealer() {
-    dealer = !dealer;
-}

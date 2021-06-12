@@ -1,6 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
+//difficulty options
+typedef enum {EASY, MODERATE, HARD} Difficulty;
+
 #include "player.h"
 #include "card.h"
 #include "pegging.h"
@@ -33,5 +36,6 @@ void cutForFirst();
 void switchDealer();
 bool singleRound();
 char gameWon(); //return -1 if game not won
+void switchDealer(); //switches the dealer and makes necesary changes
 
 #endif

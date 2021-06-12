@@ -76,9 +76,10 @@ void revealTopCard() {
         //2 points for jack cut
         players[dealer].score += HEELS_SCORE;
         clrConsole();
-        console("Two For His Heels");
+        console("Two For His Heels, press enter to continue");
         draw();
         getc(stdin);
+        clrConsole();
     }
 }
 
